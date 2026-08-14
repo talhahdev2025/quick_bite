@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quick_bite/screens/home/home_screen.dart';
+import 'package:quick_bite/screens/splash/splash_screen.dart';
 
 class QuickBite extends StatelessWidget {
   const QuickBite({super.key});
@@ -6,7 +8,10 @@ class QuickBite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(body: Center(child: Text('this is quick bite app'))),
+      routes: {
+        '/': (context) => SplashScreen(),
+        'home': (context) => HomeScreen(),
+      },
     );
   }
 }
