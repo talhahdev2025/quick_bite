@@ -15,13 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      AppDurations.splash,
-      () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SplashScreen()),
-      ),
-    );
+    
   }
 
   @override

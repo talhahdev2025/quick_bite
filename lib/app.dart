@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_bite/core/routes/app_router.dart';
 import 'package:quick_bite/screens/home/home_screen.dart';
 import 'package:quick_bite/screens/splash/splash_screen.dart';
 
@@ -7,11 +8,8 @@ class QuickBite extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/': (context) => SplashScreen(),
-        'home': (context) => HomeScreen(),
-      },
+    return MaterialApp.router(
+      routerConfig: AppRouter.routes,
     );
   }
 }
