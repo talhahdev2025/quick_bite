@@ -48,6 +48,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         LoginCustomTextField(
           focusNode: _userNameFocusNode,
           nextFocusNode: _emailFocusNode,
+          textInputType: .name,
           textInputAction: .next,
           textEditingController: _userNameTextEditingController,
           autoFocus: true,
@@ -58,6 +59,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
           focusNode: _emailFocusNode,
           nextFocusNode: _passwordFocusNode,
           textInputAction: .next,
+          textInputType: .emailAddress,
           textEditingController: _emailTextEditingController,
           labelText: 'Email address',
         ),
@@ -65,6 +67,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         LoginCustomTextField(
           focusNode: _passwordFocusNode,
           textInputAction: .done,
+          textInputType: .visiblePassword,
           textEditingController: _passwordTextEditingController,
           labelText: 'Password',
           obscureText: false,

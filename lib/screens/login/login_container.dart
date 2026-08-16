@@ -43,6 +43,7 @@ class _LoginContainerState extends State<LoginContainer> {
       textFieldsList: [
         LoginCustomTextField(
           autoFocus: true,
+          textInputType: .emailAddress,
           textInputAction: .next,
           focusNode: _emailFocusNode,
           nextFocusNode: _passwordFocusNode,
@@ -52,6 +53,7 @@ class _LoginContainerState extends State<LoginContainer> {
         AppSpacing.vLg,
         LoginCustomTextField(
           focusNode: _passwordFocusNode,
+          textInputType: .visiblePassword,
           textInputAction: .done,
           textEditingController: _passwordTextEditingController,
           labelText: 'Password',

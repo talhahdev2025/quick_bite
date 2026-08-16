@@ -11,6 +11,7 @@ class LoginCustomTextField extends StatefulWidget {
     this._focusNode,
     this._nextFocusNode,
     this._textInputAction,
+    this._textInputType,
   });
   final TextEditingController? _textEditingController;
   final String? _labelText;
@@ -19,6 +20,7 @@ class LoginCustomTextField extends StatefulWidget {
   final FocusNode? _focusNode;
   final FocusNode? _nextFocusNode;
   final TextInputAction? _textInputAction;
+  final TextInputType? _textInputType;
 
   @override
   State<LoginCustomTextField> createState() => _LoginCustomTextFieldState();
@@ -40,6 +42,7 @@ class _LoginCustomTextFieldState extends State<LoginCustomTextField> {
       focusNode: widget._focusNode,
       textInputAction: widget._textInputAction,
       obscureText: _obscureText ?? false,
+      keyboardType: widget._textInputType,
       decoration: InputDecoration(
         label: widget._labelText != null ? Text(widget._labelText!) : null,
         suffixIcon: (_obscureText != null)
