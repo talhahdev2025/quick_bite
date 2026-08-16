@@ -84,13 +84,7 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ),
           Expanded(
-            child: AuthenticationContainer(
-              textFieldsList: [
-                LoginCustomTextField(labelText: 'Email address'),
-                AppSpacing.vLg,
-                LoginCustomTextField(labelText: 'Password', obscureText: false),
-              ],
-            ),
+            child: ,
           ),
         ],
       ),
