@@ -7,10 +7,12 @@ class LoginCustomTextField extends StatefulWidget {
     this._textEditingController,
     this._labelText,
     this._obscureText,
+    this._autoFocus = false,
   });
   final TextEditingController? _textEditingController;
   final String? _labelText;
   final bool? _obscureText;
+  final bool _autoFocus;
 
   @override
   State<LoginCustomTextField> createState() => _LoginCustomTextFieldState();
@@ -28,6 +30,7 @@ class _LoginCustomTextFieldState extends State<LoginCustomTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget._textEditingController,
+      autofocus: widget._autoFocus,
       decoration: InputDecoration(
         label: widget._labelText != null ? Text(widget._labelText!) : null,
         suffixIcon: (_obscureText != null)

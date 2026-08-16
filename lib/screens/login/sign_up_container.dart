@@ -30,6 +30,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
       textFieldsList: [
         LoginCustomTextField(
           textEditingController: _userNameTextEditingController,
+          autoFocus: true,
           labelText: 'User name',
         ),
         AppSpacing.vLg,

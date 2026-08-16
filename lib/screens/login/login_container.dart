@@ -36,6 +36,7 @@ class _LoginContainerState extends State<LoginContainer> {
       btnText: 'Login',
       textFieldsList: [
         LoginCustomTextField(
+          autoFocus: true,
           textEditingController: _emailTextEditingController,
           labelText: 'Email address',
         ),
