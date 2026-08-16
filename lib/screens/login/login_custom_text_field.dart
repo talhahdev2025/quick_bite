@@ -12,7 +12,11 @@ class LoginCustomTextField extends StatefulWidget {
     this._nextFocusNode,
     this._textInputAction,
     this._textInputType,
-  });
+    this._suffixIconData,
+  }) : assert(
+         _suffixIconData == null || _obscureText == null,
+         'suffix icon and obscureText both cannot be set at same time, either remove obsureText or suffixIcon',
+       );
   final TextEditingController? _textEditingController;
   final String? _labelText;
   final bool? _obscureText;
@@ -21,6 +25,7 @@ class LoginCustomTextField extends StatefulWidget {
   final FocusNode? _nextFocusNode;
   final TextInputAction? _textInputAction;
   final TextInputType? _textInputType;
+  final IconData? _suffixIconData;
 
   @override
   State<LoginCustomTextField> createState() => _LoginCustomTextFieldState();
@@ -28,10 +33,21 @@ class LoginCustomTextField extends StatefulWidget {
 
 class _LoginCustomTextFieldState extends State<LoginCustomTextField> {
   bool? _obscureText;
+  late final VoidCallback _controllerListner;
   @override
   void initState() {
     super.initState();
     _obscureText = widget._obscureText;
+    _controllerListner = () {
+      setState(() {});
+    };
+    widget._textEditingController?.addListener(_controllerListner);
+  }
+
+  @override
+  void dispose() {
+    widget._textEditingController?.removeListener(_controllerListner);
+    super.dispose();
   }
 
   @override
@@ -55,6 +71,12 @@ class _LoginCustomTextFieldState extends State<LoginCustomTextField> {
                       ? Icons.visibility_outlined
                       : Icons.visibility_off_outlined,
                 ),
+              )
+            : ((widget._textEditingController != null &&
+                  widget._textEditingController!.text.isNotEmpty))
+            ? IconButton(
+                onPressed: () => widget._textEditingController?.clear(),
+                icon: Icon(Icons.clear_rounded),
               )
             : null,
         //focused border
