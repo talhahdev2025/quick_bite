@@ -15,18 +15,24 @@ class LoginContainer extends StatefulWidget {
 class _LoginContainerState extends State<LoginContainer> {
   late final TextEditingController _emailTextEditingController;
   late final TextEditingController _passwordTextEditingController;
+  late final FocusNode _emailFocusNode;
+  late final FocusNode _passwordFocusNode;
 
   @override
   void initState() {
     super.initState();
     _emailTextEditingController = TextEditingController();
     _passwordTextEditingController = TextEditingController();
+    _emailFocusNode = FocusNode();
+    _passwordFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _emailTextEditingController.dispose();
     _passwordTextEditingController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -37,11 +43,16 @@ class _LoginContainerState extends State<LoginContainer> {
       textFieldsList: [
         LoginCustomTextField(
           autoFocus: true,
+          textInputAction: .next,
+          focusNode: _emailFocusNode,
+          nextFocusNode: _passwordFocusNode,
           textEditingController: _emailTextEditingController,
           labelText: 'Email address',
         ),
         AppSpacing.vLg,
         LoginCustomTextField(
+          focusNode: _passwordFocusNode,
+          textInputAction: .done,
           textEditingController: _passwordTextEditingController,
           labelText: 'Password',
           obscureText: false,
@@ -50,6 +61,7 @@ class _LoginContainerState extends State<LoginContainer> {
         Align(
           alignment: .centerStart,
           child: GestureDetector(
+            //TODO: add forgot password screen
             onTap: () {},
             child: Text(
               'Forgot password?',

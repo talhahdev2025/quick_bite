@@ -8,11 +8,17 @@ class LoginCustomTextField extends StatefulWidget {
     this._labelText,
     this._obscureText,
     this._autoFocus = false,
+    this._focusNode,
+    this._nextFocusNode,
+    this._textInputAction,
   });
   final TextEditingController? _textEditingController;
   final String? _labelText;
   final bool? _obscureText;
   final bool _autoFocus;
+  final FocusNode? _focusNode;
+  final FocusNode? _nextFocusNode;
+  final TextInputAction? _textInputAction;
 
   @override
   State<LoginCustomTextField> createState() => _LoginCustomTextFieldState();
@@ -31,6 +37,9 @@ class _LoginCustomTextFieldState extends State<LoginCustomTextField> {
     return TextField(
       controller: widget._textEditingController,
       autofocus: widget._autoFocus,
+      focusNode: widget._focusNode,
+      textInputAction: widget._textInputAction,
+      obscureText: _obscureText ?? false,
       decoration: InputDecoration(
         label: widget._labelText != null ? Text(widget._labelText!) : null,
         suffixIcon: (_obscureText != null)
@@ -50,7 +59,13 @@ class _LoginCustomTextFieldState extends State<LoginCustomTextField> {
           borderSide: BorderSide(color: AppColors.primary),
         ),
       ),
-      obscureText: _obscureText ?? false,
+      onSubmitted: (value) {
+        if (widget._nextFocusNode != null) {
+          FocusScope.of(context).requestFocus(widget._nextFocusNode);
+        } else {
+          FocusScope.of(context).unfocus();
+        }
+      },
     );
   }
 }
