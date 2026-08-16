@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
-import 'package:quick_bite/core/constants/app_durations.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/screens/splash/splash_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
-import 'package:quick_bite/core/constants/app_insets.dart';
-import 'package:quick_bite/core/constants/app_radius.dart';
-import 'package:quick_bite/core/constants/app_spacing.dart';
-import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/core/widgets/custom_filled_button.dart';
-import 'package:quick_bite/screens/login/authentication_container.dart';
 import 'package:quick_bite/screens/login/login_container.dart';
-import 'package:quick_bite/screens/login/login_custom_text_field.dart';
 import 'package:quick_bite/screens/login/sign_up_container.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -58,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen>
                     flex: 1,
                     child: Row(
                       children: [
-                        // Spacer(),
                         Expanded(
                           flex: 2,
                           //tab bar
@@ -76,16 +68,7 @@ class _LoginScreenState extends State<LoginScreen>
                               Tab(text: 'SignUp'),
                             ],
                           ),
-                        ),
-                        // Spacer(),
-                        // Expanded(
-                        //   flex: 2,
-                        //   child: Container(
-                        //     height: 100,
-                        //     color: Colors.pinkAccent,
-                        //   ),
-                        // ),
-                        // Spacer(),
+                        ),                        
                       ],
                     ),
                   ),
