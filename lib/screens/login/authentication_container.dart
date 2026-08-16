@@ -7,8 +7,13 @@ import 'package:quick_bite/core/widgets/custom_filled_button.dart';
 import 'package:quick_bite/screens/login/login_custom_text_field.dart';
 
 class AuthenticationContainer extends StatelessWidget {
-  const AuthenticationContainer({super.key,required this.textFieldsList});
+  const AuthenticationContainer({
+    super.key,
+    required this.textFieldsList,
+    required this._btnText,
+  });
   final List<Widget> textFieldsList;
+  final String _btnText;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,21 +23,8 @@ class AuthenticationContainer extends StatelessWidget {
         children: [
           AppSpacing.vLg,
           ...textFieldsList,
-          AppSpacing.vLg,
-          Align(
-            alignment: .centerStart,
-            child: GestureDetector(
-              onTap: () {},
-              child: Text(
-                'Forgot password?',
-                style: AppTextStyles.labelLarge.copyWith(
-                  color: AppColors.error,
-                ),
-              ),
-            ),
-          ),
           Spacer(),
-          CustomFilledButton(onPressed: () {}, text: 'Login'),
+          CustomFilledButton(onPressed: () {}, text: _btnText),
         ],
       ),
     );

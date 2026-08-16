@@ -6,7 +6,9 @@ import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/core/widgets/custom_filled_button.dart';
 import 'package:quick_bite/screens/login/authentication_container.dart';
+import 'package:quick_bite/screens/login/login_container.dart';
 import 'package:quick_bite/screens/login/login_custom_text_field.dart';
+import 'package:quick_bite/screens/login/sign_up_container.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -59,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen>
                         // Spacer(),
                         Expanded(
                           flex: 2,
+                          //tab bar
                           child: TabBar(
                             controller: _tabController,
                             tabs: const [
@@ -84,7 +87,10 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ),
           Expanded(
-            child: ,
+            child: TabBarView(
+              controller: _tabController,
+              children: [LoginContainer(), SignUpContainer()],
+            ),
           ),
         ],
       ),
