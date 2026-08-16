@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quick_bite/app.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_durations.dart';
@@ -6,6 +7,7 @@ import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
+import 'package:quick_bite/core/routes/app_routes.dart';
 import 'package:quick_bite/screens/home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,7 +28,10 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: AppDurations.normal);
+    _controller = AnimationController(
+      vsync: this,
+      duration: AppDurations.normal,
+    );
 
     _topCircleAnimation = Tween<Offset>(
       begin: Offset.zero,
@@ -48,15 +53,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     //controller
     _controller.forward();
-    // Future.delayed(
-    //   AppDurations.splash,
-    //   () => setState(() {
-    //     Navigator.push(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => HomeScreen()),
-    //     );
-    //   }),
-    // );
   }
 
   @override
@@ -127,34 +123,33 @@ class _SplashScreenState extends State<SplashScreen>
                         child: Image.asset('assets/splash_img.png'),
                       ),
                       Spacer(),
-                      GestureDetector(
-                        //TODO: replace with go router
-                        onTap: () async {
-                          await _controller.reverse();
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ));
-                        },
-                        child: Transform.translate(
-                          offset: _buttonTranslateAnimation.value,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: AppSizes.xxxl,
+                      Transform.translate(
+                        offset: _buttonTranslateAnimation.value,
+                        child: Container(
+                          margin: AppInsets.hXxxl,
+                          width: double.infinity,
+                          child: FilledButton(
+                            onPressed: () async {
+                              final router = GoRouter.of(context);
+                              await _controller.reverse();
+                              if (!mounted) return;
+                              router.go(AppRoutes.loginPath);
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.primary,
+                              padding: AppInsets.button,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppRadius.large,
+                              ),
                             ),
-                            width: double.infinity,
-                            alignment: .center,
-                            padding: AppInsets.button,
-                            decoration: BoxDecoration(
-                              borderRadius: AppRadius.large,
-                              color: AppColors.white,
-                            ),
-                            child: Text(
-                              'Get Started',
-                              style: AppTextStyles.bodyLarge.copyWith(
-                                color: AppColors.primary,
+                            child: Padding(
+                              padding: AppInsets.button,
+                              child: Text(
+                                'Get Started',
+                                style: AppTextStyles.bodyLarge.copyWith(
+                                  color: AppColors.primary,
+                                ),
                               ),
                             ),
                           ),

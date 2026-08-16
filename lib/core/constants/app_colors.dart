@@ -8,7 +8,9 @@ class AppColors {
 
   static const darkPrimary = Color(0xFFC03536);
 
-  static const Color background = Color(0xFFFDFDFD);
+  // static const Color background = Color(0xFFFDFDFD);
+  static const Color background = Color(0xFFF2F2F2);
+
   static const Color surface = Color(0xFFFFFFFF);
 
   static const Color success = Color(0xFF22C55E);
