@@ -63,6 +63,13 @@ class _LoginScreenState extends State<LoginScreen>
                           flex: 2,
                           //tab bar
                           child: TabBar(
+                            dividerHeight: 0,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            labelStyle: TextStyle(fontWeight: .bold),
+                            unselectedLabelColor: AppColors.black,
+                            labelColor: AppColors.primary,
+                            indicatorColor: AppColors.primary,
+                            physics: CarouselScrollPhysics(),
                             controller: _tabController,
                             tabs: const [
                               Tab(text: 'Login'),
