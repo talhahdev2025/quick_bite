@@ -6,7 +6,6 @@ import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 
-
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
 

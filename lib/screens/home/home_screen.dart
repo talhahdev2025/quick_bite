@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isVerticalList = false;
   @override
   void initState() {
     super.initState();
@@ -27,17 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.surface,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            // horizontal: AppSizes.xxxl,
-            vertical: AppSizes.xl,
-          ),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              Padding(
+        child: CustomScrollView(
+          // crossAxisAlignment: .start,
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                // color: Colors.amber,
+                height: MediaQuery.heightOf(context) * 0.3,
                 padding: AppInsets.hXl,
-                child: Wrap(
+                child: Column(
+                  crossAxisAlignment: .start,
                   children: [
                     Row(
                       mainAxisAlignment: .end,
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       'Delicious\nfood for you',
-                      style: AppTextStyles.displayLarge,
+                      style: TextStyle(fontSize: 42, fontWeight: .bold),
                     ),
                     AppSpacing.vXl,
                     //search text field
@@ -78,25 +78,53 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              //list view
-              Spacer(),
-              SizedBox(
-                height: 400,
-                child: ListView.builder(
-                  scrollDirection: .horizontal,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return HomeCard(
-                      itemName: 'Burger',
-                      imageUrl:
-                          'https://cdn.dummyjson.com/recipe-images/6.webp',
-                    );
-                  },
+            ),
+            //list view
+            // Spacer(),
+            SliverToBoxAdapter(
+              child: Container(
+                // color: Colors.brown,
+                height: MediaQuery.heightOf(context) * 0.05,
+                padding: AppInsets.hXl,
+                child: Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    Text('Items', style: AppTextStyles.headlineMedium),
+                    IconButton(
+                      icon: Icon(Icons.list_rounded, size: 25),
+                      onPressed: () => setState(() {
+                        isVerticalList = !isVerticalList;
+                      }),
+                    ),
+                  ],
                 ),
               ),
-              Spacer(),
-            ],
-          ),
+            ),
+            // Spacer(),
+            isVerticalList
+                ? SliverToBoxAdapter(child: SizedBox())
+                : SliverToBoxAdapter(
+                    child: SizedBox(
+                      height:
+                          MediaQuery.heightOf(context) * 0.6 -
+                          kBottomNavigationBarHeight,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return Center(
+                            child: HomeCard(
+                              itemName: 'Burger',
+                              imageUrl:
+                                  'https://cdn.dummyjson.com/recipe-images/6.webp',
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+            // Spacer(),
+          ],
         ),
       ),
     );

@@ -13,7 +13,7 @@ class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 350,
+      height: 380,
       width: 260,
       margin: AppInsets.card,
       child: Stack(
