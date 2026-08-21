@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
-import 'package:quick_bite/screens/home/home_screen.dart';
+import 'package:quick_bite/features/home/screens/home_screen.dart';
 
 class MainNavigation extends StatelessWidget {
   const MainNavigation({super.key, required this.navigationShell});

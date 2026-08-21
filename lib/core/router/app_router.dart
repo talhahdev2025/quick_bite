@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
-import 'package:quick_bite/core/routes/app_routes.dart';
-import 'package:quick_bite/screens/favorite/favorite_screen.dart';
-import 'package:quick_bite/screens/home/home_screen.dart';
-import 'package:quick_bite/screens/login/login_screen.dart';
-import 'package:quick_bite/screens/main/main_navigation.dart';
-import 'package:quick_bite/screens/splash/splash_screen.dart';
+import 'package:quick_bite/core/router/app_routes.dart';
+import 'package:quick_bite/features/favorite/screens/favorite_screen.dart';
+import 'package:quick_bite/features/home/screens/home_screen.dart';
+import 'package:quick_bite/features/login/screens/login_screen.dart';
+import 'package:quick_bite/core/router/app_shell.dart';
+import 'package:quick_bite/features/splash/screens/splash_screen.dart';
 
 class AppRouter {
   static GoRouter routes = GoRouter(

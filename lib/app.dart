@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quick_bite/core/routes/app_router.dart';
+import 'package:quick_bite/core/router/app_router.dart';
 
 class QuickBite extends StatelessWidget {
   const QuickBite({super.key});

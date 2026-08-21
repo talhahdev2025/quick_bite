@@ -5,7 +5,7 @@ import 'package:quick_bite/core/constants/app_durations.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/core/routes/app_routes.dart';
+import 'package:quick_bite/core/router/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

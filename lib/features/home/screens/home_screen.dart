@@ -6,7 +6,7 @@ import 'package:quick_bite/core/constants/app_shadows.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/screens/home/home_card.dart';
+import 'package:quick_bite/features/home/widgets/home_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

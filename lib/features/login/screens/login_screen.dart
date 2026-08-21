@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
-import 'package:quick_bite/screens/login/login_container.dart';
-import 'package:quick_bite/screens/login/sign_up_container.dart';
+import 'package:quick_bite/features/login/widgets/login_container.dart';
+import 'package:quick_bite/features/login/widgets/sign_up_container.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
