@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/features/login/widgets/authentication_container.dart';
-import 'package:quick_bite/features/login/widgets/login_custom_text_field.dart';
+import 'package:quick_bite/core/router/app_routes.dart';
+import 'package:quick_bite/core/widgets/custom_filled_button.dart';
+import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
+import 'package:quick_bite/features/login/presentation/widgets/authentication_container.dart';
+import 'package:quick_bite/features/login/presentation/widgets/login_custom_text_field.dart';
 
-class LoginContainer extends StatefulWidget {
+class LoginContainer extends ConsumerStatefulWidget {
   const LoginContainer({super.key});
 
   @override
-  State<LoginContainer> createState() => _LoginContainerState();
+  ConsumerState<LoginContainer> createState() => _LoginContainerState();
 }
 
-class _LoginContainerState extends State<LoginContainer> {
+class _LoginContainerState extends ConsumerState<LoginContainer> {
   late final TextEditingController _emailTextEditingController;
   late final TextEditingController _passwordTextEditingController;
   late final FocusNode _emailFocusNode;
@@ -38,8 +43,8 @@ class _LoginContainerState extends State<LoginContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
     return AuthenticationContainer(
-      btnText: 'Login',
       textFieldsList: [
         LoginCustomTextField(
           autoFocus: true,
@@ -70,6 +75,27 @@ class _LoginContainerState extends State<LoginContainer> {
               style: AppTextStyles.labelLarge.copyWith(color: AppColors.error),
             ),
           ),
+        ),
+        //
+        Spacer(),
+        CustomFilledButton(
+          onPressed: () async {
+            await ref
+                .read(authProvider.notifier)
+                .signInWithEmailAndPassword(
+                  email: _emailTextEditingController.text.trim(),
+                  password: _passwordTextEditingController.text.trim(),
+                );
+            final state = ref.read(authProvider);
+            if (state.errorMessage == null && context.mounted) {
+              context.go(AppRoutes.homePath);
+            } else {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text("Invalid Cridentials")));
+            }
+          },
+          text: authState.isLoading ? "Logging in..." : "Login in",
         ),
       ],
     );

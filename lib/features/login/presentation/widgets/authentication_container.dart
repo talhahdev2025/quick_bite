@@ -9,10 +9,8 @@ class AuthenticationContainer extends StatelessWidget {
   const AuthenticationContainer({
     super.key,
     required this.textFieldsList,
-    required this._btnText,
   });
   final List<Widget> textFieldsList;
-  final String _btnText;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,13 +20,7 @@ class AuthenticationContainer extends StatelessWidget {
         children: [
           AppSpacing.vLg,
           ...textFieldsList,
-          Spacer(),
-          CustomFilledButton(
-            onPressed: () {
-              context.go(AppRoutes.homePath);
-            },
-            text: _btnText,
-          ),
+          
         ],
       ),
     );
