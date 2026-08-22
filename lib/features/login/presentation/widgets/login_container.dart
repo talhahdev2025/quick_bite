@@ -40,7 +40,6 @@ class _LoginContainerState extends ConsumerState<LoginContainer> {
     _passwordFocusNode.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);

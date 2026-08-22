@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/features/favorite/screens/favorite_screen.dart';
-import 'package:quick_bite/features/home/screens/home_screen.dart';
+import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
 import 'package:quick_bite/features/login/presentation/screens/login_screen.dart';
 import 'package:quick_bite/core/router/app_shell.dart';
 import 'package:quick_bite/features/splash/screens/splash_screen.dart';

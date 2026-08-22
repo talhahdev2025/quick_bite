@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
@@ -6,7 +7,9 @@ import 'package:quick_bite/core/constants/app_shadows.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/features/home/widgets/home_card.dart';
+import 'package:quick_bite/features/home/presentation/provider/providers.dart';
+import 'package:quick_bite/features/home/presentation/widgets/home_card.dart';
+import 'package:quick_bite/features/home/presentation/widgets/recipies_listview_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -102,24 +105,70 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Spacer(),
             isVerticalList
-                ? SliverToBoxAdapter(child: SizedBox())
+                //TODO: add vertical list also and remove sized box
+                ? Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                          return ref
+                              .watch(recipeProvider)
+                              .when(
+                                loading: () => SliverToBoxAdapter(
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                                error: (error, stackTrace) {
+                                  return SliverToBoxAdapter(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            error.toString(),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(height: 16),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              ref.invalidate(recipeProvider);
+                                            },
+                                            child: const Text('Retry'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                data: (data) {
+                                  return SliverGrid.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          
+                                          mainAxisSpacing: AppSizes.xxxl,
+                                        ),
+                                    itemCount: data.length,
+                                    itemBuilder: (context, index) {
+                                      final recipe = data[index];
+                                      return Center(
+                                        child: HomeCard(
+                                          itemName: recipe.name,
+                                          imageUrl: recipe.image,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                        },
+                  )
                 : SliverToBoxAdapter(
                     child: SizedBox(
                       height:
                           MediaQuery.heightOf(context) * 0.6 -
                           kBottomNavigationBarHeight,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return Center(
-                            child: HomeCard(
-                              itemName: 'Burger',
-                              imageUrl:
-                                  'https://cdn.dummyjson.com/recipe-images/6.webp',
-                            ),
-                          );
-                        },
+                      child: const RecipiesListViewWidget(
+                        scrollDirection: .horizontal,
                       ),
                     ),
                   ),

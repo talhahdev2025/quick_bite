@@ -8,8 +8,8 @@ import 'package:quick_bite/core/constants/app_text_styles.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({super.key, required this.itemName, required this.imageUrl});
-  final String itemName;
-  final String imageUrl;
+  final String? itemName;
+  final String? imageUrl;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +33,7 @@ class HomeCard extends StatelessWidget {
               mainAxisAlignment: .start,
               crossAxisAlignment: .center,
               children: [
-                Text(itemName, style: AppTextStyles.headlineMedium),
+                Text(itemName??'Missing Name', style: AppTextStyles.headlineMedium),
                 AppSpacing.vXxl,
                 Text(
                   'N1,900',
@@ -75,7 +75,7 @@ class HomeCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: .circle,
                   color: AppColors.background,
-                  image: DecorationImage(image: NetworkImage(imageUrl)),
+                  image: DecorationImage(image: NetworkImage(imageUrl??'')),
                 ),
               ),
             ),
