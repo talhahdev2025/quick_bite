@@ -4,10 +4,12 @@ class AppRoutes {
   static const homePath = '/home';
   static const favoritePath = '/favorite';
   static const loginPath = '/login';
+  static const recipeDetailPath = '/recipeDetail';
 
   // route names
   static const splash = 'splash';
   static const home = 'home';
   static const favorite = 'favorite';
   static const login = 'login';
+  static const recipeDetail = 'recipeDetail';
 }

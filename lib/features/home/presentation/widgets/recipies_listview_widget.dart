@@ -35,7 +35,7 @@ class RecipiesListViewWidget extends ConsumerWidget {
           itemBuilder: (context, index) {
             final recipe = data[index];
             return Center(
-              child: HomeCard(itemName: recipe.name, imageUrl: recipe.image),
+              child: HomeCard(data: recipe,),
             );
           },
         );

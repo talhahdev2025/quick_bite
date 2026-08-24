@@ -152,8 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       final recipe = data[index];
                                       return Center(
                                         child: HomeCard(
-                                          itemName: recipe.name,
-                                          imageUrl: recipe.image,
+                                          data:recipe
                                         ),
                                       );
                                     },
