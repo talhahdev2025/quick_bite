@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
-import 'package:quick_bite/core/constants/app_shadows.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     Text(
-                      'Delicious\nfood for you',
+                      'Delicious\nRecipes for you',
                       style: TextStyle(fontSize: 42, fontWeight: .bold),
                     ),
                     AppSpacing.vXl,
