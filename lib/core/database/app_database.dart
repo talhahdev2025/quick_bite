@@ -23,23 +23,25 @@ class AppDatabase {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    return await db.execute('''CREATE TABLE recipes (
-  id INTEGER PRIMARY KEY,
-  name TEXT,
-  ingredients TEXT,
-  instructions TEXT,
-  prep_time_minutes INTEGER,
-  cook_time_minutes INTEGER,
-  servings INTEGER,
-  difficulty TEXT,
-  cuisine TEXT,
-  calories_per_serving INTEGER,
-  tags TEXT,
-  user_id INTEGER,
-  image TEXT,
-  rating REAL,
-  review_count INTEGER,
-  meal_type TEXT
-)''');
+    return await db.execute('''
+  CREATE TABLE recipes (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    ingredients TEXT,
+    instructions TEXT,
+    prepTimeMinutes INTEGER,
+    cookTimeMinutes INTEGER,
+    servings INTEGER,
+    difficulty TEXT,
+    cuisine TEXT,
+    caloriesPerServing INTEGER,
+    tags TEXT,
+    userId INTEGER,
+    image TEXT,
+    rating REAL,
+    reviewCount INTEGER,
+    mealType TEXT
+  )
+''');
   }
 }

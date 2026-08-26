@@ -5,6 +5,7 @@ import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/features/home/domain/recipe.dart';
+import 'package:quick_bite/features/home/presentation/widgets/favorite_icon.dart';
 import 'package:quick_bite/features/home/presentation/widgets/home_card.dart';
 import 'package:quick_bite/features/home/presentation/widgets/info_items.dart';
 
@@ -27,11 +28,7 @@ class RecipeDetailScreen extends StatelessWidget {
                       onPressed: () => context.pop(),
                       icon: Icon(Icons.arrow_back),
                     ),
-                    IconButton(
-                      //TODO:add fetch favorites
-                      onPressed: () {},
-                      icon: Icon(Icons.favorite_border_outlined),
-                    ),
+                    FavoriteIcon(recipe: data,),
                   ],
                 ),
               ),

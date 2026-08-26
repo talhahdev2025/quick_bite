@@ -10,7 +10,7 @@ class RecipeLocalDataSource {
     final db = await _appDatabase.database;
     await db.insert(
       'recipes',
-      recipeModel.toMap(),
+      recipeModel.toMapForSQFLite(),
       conflictAlgorithm: .replace,
     );
   }
@@ -19,7 +19,9 @@ class RecipeLocalDataSource {
   Future<List<RecipeModel>> getFavorites() async {
     final db = await _appDatabase.database;
     final result = await db.query('recipes');
-    return result.map((e) => RecipeModel.fromMap(e)).toList();
+    // return result.map((e) => RecipeModel.fromMap(e)).toList();
+    //TODO:change thsi line
+    return result.map((e) => RecipeModel.fromMapForSQFLite(e)).toList();
   }
 
   //remove favorites

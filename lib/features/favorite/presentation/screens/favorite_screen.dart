@@ -152,6 +152,12 @@ class FavoriteScreen extends ConsumerWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${recipe.name} removed from favorites'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () => ref
+                            .read(favoriteNotifierProvider.notifier)
+                            .toggleFavorite(recipe),
+                      ),
                     ),
                   );
                 },
@@ -177,14 +183,14 @@ class FavoriteScreen extends ConsumerWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     // subtitle: Text('\$${recipe..toStringAsFixed(2)}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.favorite, color: Colors.red),
-                      onPressed: () {
-                        ref
-                            .read(favoriteNotifierProvider.notifier)
-                            .toggleFavorite(recipe);
-                      },
-                    ),
+                    // trailing: IconButton(
+                    //   icon: const Icon(Icons.favorite, color: Colors.red),
+                    //   onPressed: () {
+                    //     ref
+                    //         .read(favoriteNotifierProvider.notifier)
+                    //         .toggleFavorite(recipe);
+                    //   },
+                    // ),
                   ),
                 ),
               );

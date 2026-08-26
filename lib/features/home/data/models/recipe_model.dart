@@ -120,6 +120,62 @@ class RecipeModel {
     );
   }
 
+Map<String, dynamic> toMapForSQFLite() {
+  return <String, dynamic>{
+    'id': id,
+    'name': name,
+    // Encode lists to JSON strings for SQLite TEXT columns
+    'ingredients': ingredients != null ? jsonEncode(ingredients) : null,
+    'instructions': instructions != null ? jsonEncode(instructions) : null,
+    'prepTimeMinutes': prepTimeMinutes,
+    'cookTimeMinutes': cookTimeMinutes,
+    'servings': servings,
+    'difficulty': difficulty,
+    'cuisine': cuisine,
+    'caloriesPerServing': caloriesPerServing,
+    'tags': tags != null ? jsonEncode(tags) : null,
+    'userId': userId,
+    'image': image,
+    'rating': rating,
+    'reviewCount': reviewCount,
+    'mealType': mealType != null ? jsonEncode(mealType) : null,
+  };
+}
+
+factory RecipeModel.fromMapForSQFLite(Map<String, dynamic> map) {
+  // Helper to safely parse both JSON strings (from SQLite) and List<dynamic> (from API)
+  List<String>? parseList(dynamic data) {
+    if (data == null) return null;
+    if (data is String) {
+      final decoded = jsonDecode(data);
+      return List<String>.from(decoded as List);
+    }
+    if (data is List) {
+      return List<String>.from(data);
+    }
+    return null;
+  }
+
+  return RecipeModel(
+    id: map['id'] != null ? map['id'] as int : null,
+    name: map['name'] as String?,
+    ingredients: parseList(map['ingredients']),
+    instructions: parseList(map['instructions']),
+    prepTimeMinutes: map['prepTimeMinutes'] != null ? map['prepTimeMinutes'] as int : null,
+    cookTimeMinutes: map['cookTimeMinutes'] != null ? map['cookTimeMinutes'] as int : null,
+    servings: map['servings'] != null ? map['servings'] as int : null,
+    difficulty: map['difficulty'] as String?,
+    cuisine: map['cuisine'] as String?,
+    caloriesPerServing: map['caloriesPerServing'] != null ? map['caloriesPerServing'] as int : null,
+    tags: parseList(map['tags']),
+    userId: map['userId'] != null ? map['userId'] as int : null,
+    image: map['image'] as String?,
+    rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
+    reviewCount: map['reviewCount'] != null ? map['reviewCount'] as int : null,
+    mealType: parseList(map['mealType']),
+  );
+}
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
