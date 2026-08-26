@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
-import 'package:quick_bite/features/favorite/screens/favorite_screen.dart';
+import 'package:quick_bite/features/favorite/presentation/screens/favorite_screen.dart';
 import 'package:quick_bite/features/home/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
 import 'package:quick_bite/features/home/presentation/screens/recipe_detail_screen.dart';

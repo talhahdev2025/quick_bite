@@ -78,6 +78,27 @@ class RecipeModel {
     );
   }
 
+  factory RecipeModel.fromEntity(Recipe recipe) {
+    return RecipeModel(
+      id: recipe.id,
+      name: recipe.name,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
+      prepTimeMinutes: recipe.prepTimeMinutes,
+      cookTimeMinutes: recipe.cookTimeMinutes,
+      servings: recipe.servings,
+      difficulty: recipe.difficulty,
+      cuisine: recipe.cuisine,
+      caloriesPerServing: recipe.caloriesPerServing,
+      tags: recipe.tags,
+      userId: recipe.userId,
+      image: recipe.image,
+      rating: recipe.rating,
+      reviewCount: recipe.reviewCount,
+      mealType: recipe.mealType,
+    );
+  }
+
   Recipe toEntity() {
     return Recipe(
       id: id,
@@ -119,8 +140,9 @@ class RecipeModel {
       'mealType': mealType,
     };
   }
-//
-factory RecipeModel.fromMap(Map<String, dynamic> map) {
+
+  //
+  factory RecipeModel.fromMap(Map<String, dynamic> map) {
     return RecipeModel(
       id: map['id'] != null ? map['id'] as int : null,
       name: map['name'] as String?,
@@ -145,9 +167,7 @@ factory RecipeModel.fromMap(Map<String, dynamic> map) {
       tags: map['tags'] != null ? List<String>.from(map['tags']) : null,
       userId: map['userId'] != null ? map['userId'] as int : null,
       image: map['image'] as String?,
-      rating: map['rating'] != null
-          ? (map['rating'] as num).toDouble()
-          : null,
+      rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
       reviewCount: map['reviewCount'] != null
           ? map['reviewCount'] as int
           : null,
@@ -156,7 +176,7 @@ factory RecipeModel.fromMap(Map<String, dynamic> map) {
           : null,
     );
   }
-//
+  //
 
   String toJson() => json.encode(toMap());
 

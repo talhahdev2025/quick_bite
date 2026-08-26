@@ -1,0 +1,4 @@
+class DataBaseConstants {
+  DataBaseConstants._();
+  
+}
