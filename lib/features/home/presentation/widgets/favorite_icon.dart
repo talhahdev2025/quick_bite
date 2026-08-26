@@ -19,7 +19,7 @@ class FavoriteIcon extends ConsumerWidget {
       onPressed: () =>
           ref.read(favoriteNotifierProvider.notifier).toggleFavorite(recipe),
       icon: Icon(
-        Icons.favorite_border_outlined,
+        isFavorite ? Icons.favorite_outlined : Icons.favorite_border_outlined,
         color: isFavorite ? AppColors.primary : null,
       ),
     );
