@@ -13,7 +13,6 @@ class FavoriteScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoriteState = ref.watch(favoriteNotifierProvider);
-
     return Scaffold(
       backgroundColor: AppColors.surface,
       body: SafeArea(
@@ -23,11 +22,13 @@ class FavoriteScreen extends ConsumerWidget {
               child: Padding(
                 padding: AppInsets.hXl,
                 child: Row(
-                  mainAxisAlignment: .end,
+                  mainAxisAlignment: .spaceBetween,
                   children: [
+                    Text('Favorites', style: AppTextStyles.headlineLarge),
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.shopping_cart_outlined),
+                      onPressed: () =>
+                          ref.read(favoriteNotifierProvider.notifier).build(),
+                      icon: Icon(Icons.refresh_rounded),
                     ),
                   ],
                 ),
@@ -36,7 +37,8 @@ class FavoriteScreen extends ConsumerWidget {
             favoriteState.when(
               data: (favorites) {
                 if (favorites.isEmpty) {
-                  return SliverToBoxAdapter(
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -61,12 +63,11 @@ class FavoriteScreen extends ConsumerWidget {
                 }
 
                 return SliverPadding(
-                  padding: AppInsets.vSm,
+                  padding: AppInsets.screen,
                   sliver: SliverList.builder(
                     itemCount: favorites.length,
                     itemBuilder: (context, index) {
                       final recipe = favorites[index];
-
                       return Dismissible(
                         key: Key(recipe.id.toString()),
                         direction: DismissDirection.endToStart,
@@ -88,7 +89,9 @@ class FavoriteScreen extends ConsumerWidget {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
+                              showCloseIcon: true,
                               duration: AppDurations.normal,
+                              behavior: .floating,
                               content: Text(
                                 '${recipe.name} removed from favorites',
                               ),
