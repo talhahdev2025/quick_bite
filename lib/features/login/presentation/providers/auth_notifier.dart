@@ -11,6 +11,10 @@ final authProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );
 
+final authStateStreamProvider = StreamProvider<User?>(
+  (ref) => ref.watch(authRepositoryProvider).authStateChanges,
+);
+
 class AuthNotifier extends Notifier<AuthState> {
   late final AuthRepository _authRepository;
   @override
@@ -18,11 +22,19 @@ class AuthNotifier extends Notifier<AuthState> {
     _authRepository = ref.read(authRepositoryProvider);
     _listenToAuthChanges();
 
-    return const AuthState();
+    return AuthState(user: _authRepository.currentUser);
   }
 
-  void _listenToAuthChanges() {}
+  void _listenToAuthChanges() {
+    ref.listen<AsyncValue<User?>>(
+      authStateStreamProvider,
+      (previous, next) => next.whenData(
+        (user) => state = state.copyWith(user: user, isLoading: false),
+      ),
+    );
+  }
 
+  //sign in
   Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
@@ -71,10 +83,18 @@ class AuthNotifier extends Notifier<AuthState> {
       );
     }
   }
-}
-/*
+
+  //sign out
   Future<void> signOut() async {
-    await _authRepository.signOut();
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
+      await _authRepository.signOut();
+      state =  AuthState(user: null, isLoading: false);
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Failed to sign out',
+      );
+    }
   }
 }
-*/

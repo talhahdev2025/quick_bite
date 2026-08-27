@@ -15,7 +15,7 @@ class AuthRepository {
     );
   }
 
-  //sign out
+  //sign up
   Future<UserCredential> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -25,4 +25,13 @@ class AuthRepository {
       password: password,
     );
   }
+
+  //sign out
+  Future<void> signOut() async{
+    return await _auth.signOut();
+  }
+
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  User? get currentUser => _auth.currentUser;
 }

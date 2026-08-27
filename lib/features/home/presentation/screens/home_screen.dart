@@ -9,6 +9,7 @@ import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/features/home/presentation/provider/providers.dart';
 import 'package:quick_bite/features/home/presentation/widgets/home_card.dart';
 import 'package:quick_bite/features/home/presentation/widgets/recipies_listview_widget.dart';
+import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,9 +45,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       mainAxisAlignment: .end,
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.shopping_cart_outlined),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            final authState = ref.watch(authProvider);
+                            return IconButton(
+                              onPressed: authState.isLoading
+                                  ? null
+                                  : () => ref
+                                        .read(authProvider.notifier)
+                                        .signOut(),
+                              icon: authState.isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  :const Icon(Icons.logout_rounded),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -143,16 +161,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
-                                          
+
                                           mainAxisSpacing: AppSizes.xxxl,
                                         ),
                                     itemCount: data.length,
                                     itemBuilder: (context, index) {
                                       final recipe = data[index];
                                       return Center(
-                                        child: HomeCard(
-                                          data:recipe
-                                        ),
+                                        child: HomeCard(data: recipe),
                                       );
                                     },
                                   );

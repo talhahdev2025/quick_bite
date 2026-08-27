@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthState {
-  final User? user;
+   User? user;
   final bool isLoading;
   final String? errorMessage;
 
-  const AuthState({
+   AuthState({
     this.user,
     this.isLoading = false,
     this.errorMessage,

@@ -6,7 +6,6 @@ import 'package:quick_bite/features/home/domain/recipe.dart';
 
 class FavoriteIcon extends ConsumerWidget {
   const FavoriteIcon({super.key, required this.recipe});
-  // final int id;
   final Recipe recipe;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,7 +13,7 @@ class FavoriteIcon extends ConsumerWidget {
     final bool isFavorite = favoriteNotifier.maybeWhen(
       data: (data) => data.any((element) => element.id == recipe.id),
       orElse: () => false,
-    );
+    );     
     return IconButton(
       onPressed: () =>
           ref.read(favoriteNotifierProvider.notifier).toggleFavorite(recipe),
