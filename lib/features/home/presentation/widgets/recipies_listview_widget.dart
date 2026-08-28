@@ -34,9 +34,7 @@ class RecipiesListViewWidget extends ConsumerWidget {
           itemCount: data.length,
           itemBuilder: (context, index) {
             final recipe = data[index];
-            return Center(
-              child: HomeCard(data: recipe,),
-            );
+            return Center(child: HomeCard(data: recipe));
           },
         );
       },

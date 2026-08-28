@@ -13,7 +13,7 @@ class FavoriteIcon extends ConsumerWidget {
     final bool isFavorite = favoriteNotifier.maybeWhen(
       data: (data) => data.any((element) => element.id == recipe.id),
       orElse: () => false,
-    );     
+    );
     return IconButton(
       onPressed: () =>
           ref.read(favoriteNotifierProvider.notifier).toggleFavorite(recipe),

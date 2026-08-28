@@ -28,6 +28,13 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
+  
+  static const TextStyle headlineSmall = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+    height: 1.25,
+  );
 
   static const TextStyle titleLarge = TextStyle(
     fontSize: 18,

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
+import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/features/home/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/widgets/favorite_icon.dart';
-import 'package:quick_bite/features/home/presentation/widgets/home_card.dart';
+import 'package:quick_bite/features/home/presentation/widgets/recipe_detail_card.dart';
 import 'package:quick_bite/features/home/presentation/widgets/info_items.dart';
 
 class RecipeDetailScreen extends StatelessWidget {
@@ -28,13 +29,13 @@ class RecipeDetailScreen extends StatelessWidget {
                       onPressed: () => context.pop(),
                       icon: Icon(Icons.arrow_back),
                     ),
-                    FavoriteIcon(recipe: data,),
+                    FavoriteIcon(recipe: data),
                   ],
                 ),
               ),
             ),
             SliverToBoxAdapter(
-              child: HomeCard(
+              child: RecipeDetailCard(
                 showDifficulty: true,
                 top: -30,
                 bottom: 150,
@@ -76,6 +77,7 @@ class RecipeDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
+            //ingredients
             SliverToBoxAdapter(
               child: Padding(
                 padding: AppInsets.lg,
@@ -84,21 +86,26 @@ class RecipeDetailScreen extends StatelessWidget {
                   children: [
                     Text('Ingredients', style: AppTextStyles.headlineMedium),
                     AppSpacing.vSm,
-                    Wrap(
+                    Column(
                       spacing: 12.0,
-                      runSpacing: 12.0,
                       children: (data.ingredients ?? []).map((ingredient) {
-                        return IntrinsicWidth(
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
                           child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: .start,
                             children: [
                               Icon(
                                 Icons.check_circle,
-                                size: 20,
+                                size: AppSizes.iconLarge,
                                 color: AppColors.primary,
                               ),
                               const SizedBox(width: 6),
-                              Text(ingredient, style: AppTextStyles.bodyLarge),
+                              Expanded(
+                                child: Text(
+                                  ingredient,
+                                  style: AppTextStyles.bodyLarge,
+                                ),
+                              ),
                             ],
                           ),
                         );

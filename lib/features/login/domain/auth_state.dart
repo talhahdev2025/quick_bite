@@ -1,23 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthState {
-   User? user;
+  User? user;
   final bool isLoading;
   final String? errorMessage;
 
-   AuthState({
-    this.user,
-    this.isLoading = false,
-    this.errorMessage,
-  });
+  AuthState({this.user, this.isLoading = false, this.errorMessage});
 
   bool get isLoggedIn => user != null;
 
-  AuthState copyWith({
-    User? user,
-    bool? isLoading,
-    String? errorMessage,
-  }) {
+  AuthState copyWith({User? user, bool? isLoading, String? errorMessage}) {
     return AuthState(
       user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,
