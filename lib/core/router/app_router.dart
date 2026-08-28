@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/core/router/router_notifer.dart';
+import 'package:quick_bite/features/add_recipe/presentation/screens/add_recipe_screen.dart';
 import 'package:quick_bite/features/favorite/presentation/screens/favorite_screen.dart';
 import 'package:quick_bite/features/home/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
@@ -52,6 +53,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                   final data = state.extra as Recipe;
                   return RecipeDetailScreen(data: data);
                 },
+              ),
+            ],
+          ),
+          //add recipe branch
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.addRecipePath,
+                name: AppRoutes.addRecipe,
+                builder: (context, state) => AddRecipeScreen(),
               ),
             ],
           ),

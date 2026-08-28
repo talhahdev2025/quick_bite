@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quick_bite/core/constants/app_colors.dart';
-import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
 
 class MainNavigation extends StatelessWidget {
   const MainNavigation({super.key, required this.navigationShell});
@@ -19,6 +17,11 @@ class MainNavigation extends StatelessWidget {
             selectedIcon: Icon(Icons.home_rounded),
             icon: Icon(Icons.home_outlined),
             label: 'Home',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.add_circle_rounded),
+            icon: Icon(Icons.add_circle_outline_rounded),
+            label: 'Add Recipe',
           ),
           //favortie
           NavigationDestination(

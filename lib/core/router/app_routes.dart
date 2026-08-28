@@ -5,6 +5,7 @@ class AppRoutes {
   static const favoritePath = '/favorite';
   static const loginPath = '/login';
   static const recipeDetailPath = '/recipeDetail';
+  static const addRecipePath = '/addRecipe';
 
   // route names
   static const splash = 'splash';
@@ -12,4 +13,5 @@ class AppRoutes {
   static const favorite = 'favorite';
   static const login = 'login';
   static const recipeDetail = 'recipeDetail';
+  static const addRecipe = 'addRecipe';
 }
