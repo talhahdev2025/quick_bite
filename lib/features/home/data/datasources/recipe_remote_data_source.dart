@@ -2,14 +2,22 @@ import 'package:quick_bite/core/network/api_client.dart';
 import 'package:quick_bite/features/home/data/models/recipe_model.dart';
 
 class RecipeRemoteDataSource {
-  final ApiClient _apiClient;
-  RecipeRemoteDataSource({required this._apiClient});
+  final ApiClient apiClient;
+  RecipeRemoteDataSource({required this.apiClient});
 
-  Future<List<RecipeModel>> getRecipies() async {
-    final response = await _apiClient.get(endpoint: '');
-    final List<dynamic> data = response['recipes'];
-    return data
-        .map((recipe) => RecipeModel.fromMap(recipe as Map<String, dynamic>))
-        .toList();
+  Future<List<RecipeModel>> getRecipes() async {
+    final dynamic response = await apiClient.get(endpoint: '');
+    if (response is Map<String, dynamic> && response['recipes'] is List) {
+      final List<dynamic> data = response['recipes'] as List<dynamic>;
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map((recipe) => RecipeModel.fromMap(recipe))
+          .toList();
+    }
+    return [];
   }
+
+  // Backward compatibility alias
+  Future<List<RecipeModel>> getRecipies() => getRecipes();
 }
+

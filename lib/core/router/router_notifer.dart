@@ -3,28 +3,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 
 final routerNotifierProvider = NotifierProvider<RouterNotifier, void>(
-  () => RouterNotifier(),
+  RouterNotifier.new,
 );
 
 class RouterNotifier extends Notifier<void> implements Listenable {
-  VoidCallback? _routerListener;
+  final List<VoidCallback> _listeners = [];
 
   @override
   void build() {
     ref.listen(authProvider, (previous, next) {
       if (previous?.isLoggedIn != next.isLoggedIn) {
-        _routerListener?.call();
+        _notify();
       }
     });
   }
 
+  void _notify() {
+    for (final listener in List<VoidCallback>.from(_listeners)) {
+      listener();
+    }
+  }
+
   @override
   void addListener(VoidCallback listener) {
-    _routerListener = listener;
+    _listeners.add(listener);
   }
 
   @override
   void removeListener(VoidCallback listener) {
-    _routerListener = null;
+    _listeners.remove(listener);
   }
 }
+

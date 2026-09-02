@@ -32,19 +32,19 @@ class _SplashScreenState extends State<SplashScreen>
 
     _topCircleAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: Offset(-30, 30),
+      end: const Offset(-30, 30),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
     _bottomCircleAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: Offset(30, -30),
+      end: const Offset(30, -30),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
     _imageScaleAnimation = Tween<double>(
       begin: 0.7,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
     _buttonTranslateAnimation = Tween<Offset>(
-      begin: Offset(0, 20),
+      begin: const Offset(0, 20),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
@@ -76,8 +76,8 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Container(
                     width: 300,
                     height: 300,
-                    decoration: BoxDecoration(
-                      shape: .circle,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
                       color: AppColors.darkPrimary,
                     ),
                   ),
@@ -92,11 +92,11 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Container(
                     width: 400,
                     height: 400,
-                    decoration: BoxDecoration(
-                      shape: .circle,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
                       gradient: LinearGradient(
-                        begin: .topCenter,
-                        end: .bottomRight,
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomRight,
                         colors: [AppColors.darkPrimary, AppColors.primary],
                         stops: [0.5, 1],
                       ),
@@ -109,8 +109,7 @@ class _SplashScreenState extends State<SplashScreen>
                 bottom: 50,
                 right: 0,
                 left: 0,
-                child: Container(
-                  // color: Colors.white,
+                child: SizedBox(
                   width: double.infinity,
                   height: 450,
                   child: Column(
@@ -119,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
                         scale: _imageScaleAnimation,
                         child: Image.asset('assets/splash_img.png'),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Transform.translate(
                         offset: _buttonTranslateAnimation.value,
                         child: Container(
@@ -136,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen>
                               backgroundColor: AppColors.white,
                               foregroundColor: AppColors.primary,
                               padding: AppInsets.button,
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: AppRadius.large,
                               ),
                             ),

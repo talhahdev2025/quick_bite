@@ -197,17 +197,26 @@ factory RecipeModel.fromMapForSQFLite(Map<String, dynamic> map) {
     };
   }
 
-  //
   factory RecipeModel.fromMap(Map<String, dynamic> map) {
+    List<String>? parseStringList(dynamic data) {
+      if (data == null) return null;
+      if (data is List) {
+        return data.map((e) => e.toString()).toList();
+      }
+      if (data is String) {
+        final dynamic decoded = jsonDecode(data);
+        if (decoded is List) {
+          return decoded.map((e) => e.toString()).toList();
+        }
+      }
+      return null;
+    }
+
     return RecipeModel(
       id: map['id'] != null ? map['id'] as int : null,
       name: map['name'] as String?,
-      ingredients: map['ingredients'] != null
-          ? List<String>.from(map['ingredients'])
-          : null,
-      instructions: map['instructions'] != null
-          ? List<String>.from(map['instructions'])
-          : null,
+      ingredients: parseStringList(map['ingredients']),
+      instructions: parseStringList(map['instructions']),
       prepTimeMinutes: map['prepTimeMinutes'] != null
           ? map['prepTimeMinutes'] as int
           : null,
@@ -220,24 +229,24 @@ factory RecipeModel.fromMapForSQFLite(Map<String, dynamic> map) {
       caloriesPerServing: map['caloriesPerServing'] != null
           ? map['caloriesPerServing'] as int
           : null,
-      tags: map['tags'] != null ? List<String>.from(map['tags']) : null,
+      tags: parseStringList(map['tags']),
       userId: map['userId'] != null ? map['userId'] as int : null,
       image: map['image'] as String?,
       rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
       reviewCount: map['reviewCount'] != null
           ? map['reviewCount'] as int
           : null,
-      mealType: map['mealType'] != null
-          ? List<String>.from(map['mealType'])
-          : null,
+      mealType: parseStringList(map['mealType']),
     );
   }
-  //
 
   String toJson() => json.encode(toMap());
 
-  factory RecipeModel.fromJson(String source) =>
+  factory RecipeModel.fromJson(Map<String, dynamic> map) => RecipeModel.fromMap(map);
+
+  factory RecipeModel.fromJsonString(String source) =>
       RecipeModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
 
   @override
   String toString() {

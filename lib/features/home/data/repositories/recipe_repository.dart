@@ -2,12 +2,13 @@ import 'package:quick_bite/features/home/data/datasources/recipe_remote_data_sou
 import 'package:quick_bite/features/home/domain/recipe.dart';
 
 class RecipeRepository {
-  final RecipeRemoteDataSource _recipeRemoteDataSource;
+  final RecipeRemoteDataSource recipeRemoteDataSource;
 
-  RecipeRepository({required this._recipeRemoteDataSource});
+  RecipeRepository({required this.recipeRemoteDataSource});
 
   Future<List<Recipe>> getRecipes() async {
-    final recipieModels = await _recipeRemoteDataSource.getRecipies();
-    return recipieModels.map((recipeModel) => recipeModel.toEntity()).toList();
+    final recipeModels = await recipeRemoteDataSource.getRecipes();
+    return recipeModels.map((recipeModel) => recipeModel.toEntity()).toList();
   }
 }
+

@@ -18,19 +18,24 @@ class FavoriteNotifier extends AsyncNotifier<List<Recipe>> {
 
   Future<void> toggleFavorite(Recipe recipe) async {
     final favoriteRepo = ref.read(favoriteRecipeRepositoryProvider);
-    //TODO: dont use null assertion opertor ! here
-    final isFavorite = await favoriteRepo.isFavorite(recipe.id!);
+    final id = recipe.id;
+    if (id == null) return;
+
+    final isFavorite = await favoriteRepo.isFavorite(id);
     if (isFavorite) {
-      //TODO: dont use null asserstion operator here
-      favoriteRepo.removeFavorite(recipe.id!);
+      await favoriteRepo.removeFavorite(id);
     } else {
-      favoriteRepo.addFavorite(recipe);
+      await favoriteRepo.addFavorite(recipe);
     }
+    state = await AsyncValue.guard(() => _fetchFavorites());
+  }
+
+  Future<void> refresh() async {
     state = await AsyncValue.guard(() => _fetchFavorites());
   }
 }
 
-//providers
+// Providers
 final databaseProvider = Provider<AppDatabase>((ref) => AppDatabase());
 
 final recipeLocalDataSourceProvider = Provider<RecipeLocalDataSource>(
@@ -45,3 +50,4 @@ final favoriteRecipeRepositoryProvider = Provider<FavoriteRecipeRepository>(
 
 final favoriteNotifierProvider =
     AsyncNotifierProvider<FavoriteNotifier, List<Recipe>>(FavoriteNotifier.new);
+

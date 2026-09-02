@@ -12,7 +12,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  late final TabController _tabController;
+
   @override
   void initState() {
     super.initState();
@@ -27,63 +28,69 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final topHeight = (size.height * 0.38).clamp(200.0, 360.0);
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              clipBehavior: .hardEdge,
-              decoration: BoxDecoration(
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            Container(
+              height: topHeight,
+              width: double.infinity,
+              clipBehavior: Clip.hardEdge,
+              decoration: const BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
                 ),
               ),
               child: Column(
                 children: [
                   Expanded(
-                    flex: 5,
-                    child: Image.asset('assets/login_page_img.png'),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          //tab bar
-                          child: TabBar(
-                            dividerHeight: 0,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            labelStyle: TextStyle(fontWeight: .bold),
-                            unselectedLabelColor: AppColors.black,
-                            labelColor: AppColors.primary,
-                            indicatorColor: AppColors.primary,
-                            physics: CarouselScrollPhysics(),
-                            controller: _tabController,
-                            tabs: const [
-                              Tab(text: 'Login'),
-                              Tab(text: 'SignUp'),
-                            ],
-                          ),
-                        ),                        
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 24, bottom: 8),
+                      child: Image.asset(
+                        'assets/login_page_img.png',
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.restaurant_menu, size: 80, color: AppColors.primary),
+                      ),
                     ),
+                  ),
+                  TabBar(
+                    dividerHeight: 0,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    unselectedLabelColor: AppColors.textSecondary,
+                    labelColor: AppColors.primary,
+                    indicatorColor: AppColors.primary,
+                    indicatorWeight: 3,
+                    controller: _tabController,
+                    tabs: const [
+                      Tab(text: 'Log In'),
+                      Tab(text: 'Sign Up'),
+                    ],
                   ),
                 ],
               ),
             ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [LoginContainer(), SignUpContainer()],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const [
+                  LoginContainer(),
+                  SignUpContainer(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+

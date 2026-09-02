@@ -18,85 +18,112 @@ class LoginContainer extends ConsumerStatefulWidget {
 }
 
 class _LoginContainerState extends ConsumerState<LoginContainer> {
-  late final TextEditingController _emailTextEditingController;
-  late final TextEditingController _passwordTextEditingController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
   late final FocusNode _emailFocusNode;
   late final FocusNode _passwordFocusNode;
 
   @override
   void initState() {
     super.initState();
-    _emailTextEditingController = TextEditingController();
-    _passwordTextEditingController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    _emailTextEditingController.dispose();
-    _passwordTextEditingController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }
+
+  Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter both email and password'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
+    await ref.read(authProvider.notifier).signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+    if (!mounted) return;
+
+    final state = ref.read(authProvider);
+    if (state.errorMessage == null && state.isLoggedIn) {
+      context.go(AppRoutes.homePath);
+    } else if (state.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(state.errorMessage ?? 'Invalid credentials'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+
     return AuthenticationContainer(
       textFieldsList: [
         LoginCustomTextField(
           autoFocus: true,
-          textInputType: .emailAddress,
-          textInputAction: .next,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
           focusNode: _emailFocusNode,
           nextFocusNode: _passwordFocusNode,
-          textEditingController: _emailTextEditingController,
+          controller: _emailController,
           labelText: 'Email address',
+          prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
         ),
         AppSpacing.vLg,
         LoginCustomTextField(
           focusNode: _passwordFocusNode,
-          textInputType: .visiblePassword,
-          textInputAction: .done,
-          textEditingController: _passwordTextEditingController,
+          keyboardType: TextInputType.visiblePassword,
+          textInputAction: TextInputAction.done,
+          controller: _passwordController,
           labelText: 'Password',
-          obscureText: false,
+          obscureText: true,
+          prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textSecondary),
         ),
-        AppSpacing.vLg,
+        AppSpacing.vMd,
         Align(
-          alignment: .centerStart,
-          child: GestureDetector(
-            //TODO: add forgot password screen
-            onTap: () {},
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Password reset link feature coming soon!')),
+              );
+            },
             child: Text(
               'Forgot password?',
-              style: AppTextStyles.labelLarge.copyWith(color: AppColors.error),
+              style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
             ),
           ),
         ),
-        //
-        Spacer(),
+        AppSpacing.vLg,
         CustomFilledButton(
-          onPressed: () async {
-            await ref
-                .read(authProvider.notifier)
-                .signInWithEmailAndPassword(
-                  email: _emailTextEditingController.text.trim(),
-                  password: _passwordTextEditingController.text.trim(),
-                );
-            final state = ref.read(authProvider);
-            if (state.errorMessage == null && context.mounted) {
-              context.go(AppRoutes.homePath);
-            } else {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text("Invalid Cridentials")));
-            }
-          },
-          text: authState.isLoading ? "Logging in..." : "Login in",
+          isLoading: authState.isLoading,
+          onPressed: _handleLogin,
+          text: 'Log in',
         ),
       ],
     );
   }
 }
+

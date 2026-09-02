@@ -10,7 +10,7 @@ class RecipiesListViewWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recipesAsync = ref.watch(recipeProvider);
     return recipesAsync.when(
-      loading: () => Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) {
         return Center(
           child: Column(

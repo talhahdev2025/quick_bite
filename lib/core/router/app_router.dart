@@ -43,7 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.homePath,
                 name: AppRoutes.home,
-                builder: (context, state) => HomeScreen(),
+                builder: (context, state) => const HomeScreen(),
               ),
               //recipe detail screen
               GoRoute(
@@ -62,7 +62,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.addRecipePath,
                 name: AppRoutes.addRecipe,
-                builder: (context, state) => AddRecipeScreen(),
+                builder: (context, state) => const AddRecipeScreen(),
               ),
             ],
           ),
@@ -72,7 +72,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.favoritePath,
                 name: AppRoutes.favorite,
-                builder: (context, state) => FavoriteScreen(),
+                builder: (context, state) => const FavoriteScreen(),
               ),
             ],
           ),
@@ -81,12 +81,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.splashPath,
         name: AppRoutes.splash,
-        builder: (context, state) => SplashScreen(),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: AppRoutes.loginPath,
         name: AppRoutes.login,
-        builder: (context, state) => LoginScreen(),
+        builder: (context, state) => const LoginScreen(),
       ),
     ],
   );

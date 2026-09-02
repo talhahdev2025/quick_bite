@@ -1,181 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:quick_bite/core/constants/app_colors.dart';
-// import 'package:quick_bite/core/constants/app_insets.dart';
-// import 'package:quick_bite/core/constants/app_radius.dart';
-// import 'package:quick_bite/core/constants/app_sizes.dart';
-// import 'package:quick_bite/core/constants/app_spacing.dart';
-// import 'package:quick_bite/core/constants/app_text_styles.dart';
-// import 'package:quick_bite/features/home/presentation/provider/providers.dart';
-// import 'package:quick_bite/features/home/presentation/widgets/home_card.dart';
-// import 'package:quick_bite/features/home/presentation/widgets/home_card1.dart';
-// import 'package:quick_bite/features/home/presentation/widgets/recipies_listview_widget.dart';
-// import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
-
-// class HomeScreen extends StatefulWidget {
-//   const HomeScreen({super.key});
-
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   bool isVerticalList = false;
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: AppColors.surface,
-//       resizeToAvoidBottomInset: false,
-//       body: SafeArea(
-//         child: CustomScrollView(
-//           // crossAxisAlignment: .start,
-//           slivers: [
-//             SliverToBoxAdapter(
-//               child: Container(
-//                 // color: Colors.amber,
-//                 height: MediaQuery.heightOf(context) * 0.3,
-//                 padding: AppInsets.hXl,
-//                 child: Column(
-//                   crossAxisAlignment: .start,
-//                   children: [
-//                     Row(
-//                       mainAxisAlignment: .end,
-//                       children: [
-//                         Consumer(
-//                           builder: (context, ref, child) {
-//                             final authState = ref.watch(authProvider);
-//                             return IconButton(
-//                               onPressed: authState.isLoading
-//                                   ? null
-//                                   : () => ref
-//                                         .read(authProvider.notifier)
-//                                         .signOut(),
-//                               icon: authState.isLoading
-//                                   ? const SizedBox(
-//                                       height: 20,
-//                                       width: 20,
-//                                       child: CircularProgressIndicator(
-//                                         strokeWidth: 2,
-//                                       ),
-//                                     )
-//                                   : const Icon(Icons.logout_rounded),
-//                             );
-//                           },
-//                         ),
-//                       ],
-//                     ),
-//                     Text(
-//                       'Delicious\nRecipes for you',
-//                       style: TextStyle(fontSize: 42, fontWeight: .bold),
-//                     ),
-//                     AppSpacing.vXl,
-//                     //search text field
-//                     TextField(
-//                       decoration: InputDecoration(
-//                         hint: Text(
-//                           'search',
-//                           style: AppTextStyles.bodyLarge.copyWith(
-//                             color: AppColors.textHint,
-//                           ),
-//                         ),
-//                         prefixIcon: Icon(Icons.search_rounded),
-//                         filled: true,
-//                         fillColor: AppColors.background,
-//                         enabledBorder: OutlineInputBorder(
-//                           borderSide: .none,
-//                           borderRadius: AppRadius.xLarge,
-//                         ),
-//                         focusedBorder: OutlineInputBorder(
-//                           borderSide: BorderSide(color: AppColors.primary),
-//                           borderRadius: AppRadius.xLarge,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             //list view
-//             // Spacer(),
-//             SliverToBoxAdapter(
-//               child: Container(
-//                 // color: Colors.brown,
-//                 height: MediaQuery.heightOf(context) * 0.05,
-//                 padding: AppInsets.hXl,
-//                 child: Row(
-//                   mainAxisAlignment: .spaceBetween,
-//                   children: [
-//                     Text('Recipes', style: AppTextStyles.headlineMedium),
-//                     IconButton(
-//                       icon: Icon(Icons.list_rounded, size: 25),
-//                       onPressed: () => setState(() {
-//                         isVerticalList = !isVerticalList;
-//                       }),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             // Spacer
-//             Consumer(
-//               builder: (BuildContext context, WidgetRef ref, Widget? child) {
-//                 return ref
-//                     .watch(recipeProvider)
-//                     .when(
-//                       loading: () => SliverToBoxAdapter(
-//                         child: Center(child: CircularProgressIndicator()),
-//                       ),
-//                       error: (error, stackTrace) {
-//                         return SliverToBoxAdapter(
-//                           child: Center(
-//                             child: Column(
-//                               mainAxisSize: MainAxisSize.min,
-//                               children: [
-//                                 Text(
-//                                   error.toString(),
-//                                   textAlign: TextAlign.center,
-//                                 ),
-//                                 const SizedBox(height: 16),
-//                                 ElevatedButton(
-//                                   onPressed: () {
-//                                     ref.invalidate(recipeProvider);
-//                                   },
-//                                   child: const Text('Retry'),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         );
-//                       },
-//                       data: (data) {
-//                         return SliverGrid.builder(
-//                           gridDelegate:
-//                               SliverGridDelegateWithFixedCrossAxisCount(
-//                                 crossAxisCount: 1,
-//                                 mainAxisSpacing: AppSizes.xxxl,
-//                               ),
-//                           itemCount: data.length,
-//                           itemBuilder: (context, index) {
-//                             final recipe = data[index];
-//                             return Center(child: HomeCard1(data: recipe));
-//                           },
-//                         );
-//                       },
-//                     );
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
@@ -184,176 +6,321 @@ import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/features/home/presentation/provider/providers.dart';
-import 'package:quick_bite/features/home/presentation/widgets/recipe_detail_card.dart';
 import 'package:quick_bite/features/home/presentation/widgets/home_card.dart';
 import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  // Toggle between 1 column and 2 columns
-  bool isGridMode = true;
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleSignOut() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Sign Out'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      await ref.read(authProvider.notifier).signOut();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final filteredRecipes = ref.watch(filteredRecipesProvider);
+    final authState = ref.watch(authProvider);
+    final userName = authState.user?.displayName;
+
     return Scaffold(
-      backgroundColor: AppColors.surface,
-      resizeToAvoidBottomInset: false,
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // Top Header & Search Section
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: AppInsets.hXl,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Consumer(
-                          builder: (context, ref, child) {
-                            final authState = ref.watch(authProvider);
-                            return IconButton(
-                              onPressed: authState.isLoading
-                                  ? null
-                                  : () => ref
-                                        .read(authProvider.notifier)
-                                        .signOut(),
-                              icon: authState.isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                      ),
-                                    )
-                                  : const Icon(Icons.logout_rounded),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      'Delicious\nRecipes for you',
-                      style: TextStyle(
-                        fontSize: 34,
-                        fontWeight: FontWeight.bold,
-                        height: 1.15,
-                      ),
-                    ),
-                    AppSpacing.vXl,
-                    // Search Text Field
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: AppTextStyles.bodyLarge.copyWith(
-                          color: AppColors.textHint,
-                        ),
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        filled: true,
-                        fillColor: AppColors.background,
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: AppRadius.xLarge,
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.primary),
-                          borderRadius: AppRadius.xLarge,
-                        ),
-                      ),
-                    ),
-                    AppSpacing.vLg,
-                  ],
-                ),
-              ),
+        child: RefreshIndicator(
+          color: AppColors.primary,
+          onRefresh: () async {
+            ref.invalidate(recipeProvider);
+            await ref.read(recipeProvider.future);
+          },
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
             ),
-
-            // Recipes Section Header & Layout Toggle
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: AppInsets.hXl,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Recipes', style: AppTextStyles.headlineMedium),
-                    IconButton(
-                      icon: Icon(
-                        isGridMode
-                            ? Icons.view_agenda_outlined
-                            : Icons.grid_view_rounded,
-                        size: 24,
-                      ),
-                      onPressed: () => setState(() {
-                        isGridMode = !isGridMode;
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // Recipe Grid/List View
-            Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                return ref
-                    .watch(recipeProvider)
-                    .when(
-                      loading: () => const SliverFillRemaining(
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      error: (error, stackTrace) {
-                        return SliverFillRemaining(
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  error.toString(),
-                                  textAlign: TextAlign.center,
+            slivers: [
+              // Top Header & Search Section
+              SliverToBoxAdapter(
+                child: Container(
+                  color: AppColors.surface,
+                  padding: AppInsets.screen,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Hello, ${userName ?? "Foodie"}! 👋',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textSecondary,
                                 ),
-                                const SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    ref.invalidate(recipeProvider);
-                                  },
-                                  child: const Text('Retry'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      data: (data) {
-                        return SliverGrid.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: isGridMode ? 2 : 1,
-                                // mainAxisSpacing: 16,
-                                // crossAxisSpacing: 16,
-                                childAspectRatio: isGridMode ? 0.62 : 1.2,
                               ),
-                          itemCount: data.length,
+                              AppSpacing.vXs,
+                              const Text(
+                                'Delicious Recipes\nfor you',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.15,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: authState.isLoading ? null : _handleSignOut,
+                            tooltip: 'Sign Out',
+                            icon: authState.isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                : const Icon(
+                                    Icons.logout_rounded,
+                                    color: AppColors.textSecondary,
+                                  ),
+                          ),
+                        ],
+                      ),
+                      AppSpacing.vLg,
+                      // Search Text Field
+                      TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          ref.read(searchQueryProvider.notifier).setQuery(value);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search by recipe, cuisine, or tags...',
+                          hintStyle: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textHint,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.search_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear_rounded),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    ref.read(searchQueryProvider.notifier).clear();
+                                    setState(() {});
+                                  },
+                                )
+                              : null,
+                          filled: true,
+                          fillColor: AppColors.background,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: AppRadius.xLarge,
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                            borderRadius: BorderRadius.all(Radius.circular(24)),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Section Title
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Popular Recipes',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      filteredRecipes.maybeWhen(
+                        data: (list) => Text(
+                          '${list.length} found',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Recipe Content
+              filteredRecipes.when(
+                loading: () => const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  ),
+                ),
+                error: (error, stackTrace) => SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Padding(
+                      padding: AppInsets.screen,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.cloud_off_rounded,
+                            size: 64,
+                            color: AppColors.textHint,
+                          ),
+                          AppSpacing.vMd,
+                          Text(
+                            error.toString(),
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.bodyMedium,
+                          ),
+                          AppSpacing.vLg,
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: AppColors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppRadius.large,
+                              ),
+                            ),
+                            onPressed: () {
+                              ref.invalidate(recipeProvider);
+                            },
+                            icon: const Icon(Icons.refresh_rounded),
+                            label: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                data: (recipes) {
+                  if (recipes.isEmpty) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.search_off_rounded,
+                              size: 64,
+                              color: AppColors.textHint,
+                            ),
+                            AppSpacing.vMd,
+                            const Text(
+                              'No recipes found matching your search',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                            AppSpacing.vMd,
+                            TextButton(
+                              onPressed: () {
+                                _searchController.clear();
+                                ref.read(searchQueryProvider.notifier).clear();
+                                setState(() {});
+                              },
+                              child: const Text('Clear search'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  return SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    sliver: SliverLayoutBuilder(
+                      builder: (context, constraints) {
+                        final isWideScreen = constraints.crossAxisExtent > 600;
+
+                        if (isWideScreen) {
+                          return SliverGrid(
+                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 400,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 0.82,
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => HomeCard(data: recipes[index]),
+                              childCount: recipes.length,
+                            ),
+                          );
+                        }
+
+                        return SliverList.separated(
+                          itemCount: recipes.length,
+                          separatorBuilder: (context, index) => const SizedBox(height: 16),
                           itemBuilder: (context, index) {
-                            final recipe = data[index];
-                            return HomeCard(
-                              data: recipe,
-                              width: double.infinity,
-                              height: double.infinity,
-                            );
+                            return HomeCard(data: recipes[index]);
                           },
                         );
                       },
-                    );
-              },
-            ),
-          ],
+                    ),
+                  );
+                },
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 24),
+              ),
+            ],
+          ),
         ),
       ),
     );

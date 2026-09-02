@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
@@ -20,6 +19,7 @@ class HomeCard extends StatelessWidget {
     this.height,
     this.width,
   });
+
   final double? bottom;
   final Recipe data;
   final double? top;
@@ -33,42 +33,52 @@ class HomeCard extends StatelessWidget {
         context.pushNamed(AppRoutes.recipeDetail, extra: data);
       },
       child: Container(
-        height: height ?? 300, // Adjust height based on content
-        width: width ?? 340, // Adjust width
-        margin: AppInsets.card,
+        width: width,
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: AppRadius.large,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
+        clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Recipe Image Stack
             Stack(
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(
-                      16.0,
-                    ), // Use appropriate value from AppRadius
-                  ),
+                Hero(
+                  tag: 'recipe_image_${data.id}',
                   child: Image.network(
                     data.image ?? '',
-                    height: 180, // Fixed height for image area
+                    height: 190,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: 190,
+                        color: AppColors.background,
+                        child: const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      );
+                    },
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        height: 180,
+                        height: 190,
                         color: AppColors.background,
-                        child: const Icon(Icons.broken_image),
+                        child: const Icon(
+                          Icons.broken_image_rounded,
+                          size: 48,
+                          color: AppColors.textHint,
+                        ),
                       );
                     },
                   ),
@@ -77,12 +87,37 @@ class HomeCard extends StatelessWidget {
                 Positioned(
                   top: AppSizes.md,
                   right: AppSizes.md,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white70, // Semi-transparent white
-
+                  child: Material(
+                    color: AppColors.white.withValues(alpha: 0.9),
+                    shape: const CircleBorder(),
+                    elevation: 2,
                     child: FavoriteIcon(recipe: data),
                   ),
                 ),
+                // Cuisine badge if available
+                if (data.cuisine != null && data.cuisine!.isNotEmpty)
+                  Positioned(
+                    top: AppSizes.md,
+                    left: AppSizes.md,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        data.cuisine!,
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
             // Recipe Details (Name, Time, Difficulty)
@@ -92,9 +127,10 @@ class HomeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data.name ?? 'Missing Name',
+                    data.name ?? 'Delicious Recipe',
                     style: AppTextStyles.headlineSmall.copyWith(
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -102,29 +138,53 @@ class HomeCard extends StatelessWidget {
                   AppSpacing.vMd,
                   Row(
                     children: [
-                      // Time
-                      Icon(
+                      const Icon(
                         Icons.access_time,
                         size: 16,
                         color: AppColors.onSurfaceMedium,
                       ),
                       AppSpacing.hSm,
                       Text(
-                        '${data.cookTimeMinutes ?? 0}m', // Assuming duration is in minutes
+                        '${data.cookTimeMinutes ?? 0}m',
                         style: AppTextStyles.bodySmall,
                       ),
                       AppSpacing.hMd,
-                      // Separator Dot
                       const Text(
                         '·',
-                        style: TextStyle(color: AppColors.onSurfaceMedium),
+                        style: TextStyle(
+                          color: AppColors.onSurfaceMedium,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       AppSpacing.hMd,
-                      // Difficulty
-                      Text(
-                        '${data.difficulty}',
-                        style: AppTextStyles.bodySmall,
+                      const Icon(
+                        Icons.local_fire_department_outlined,
+                        size: 16,
+                        color: AppColors.primary,
                       ),
+                      AppSpacing.hSm,
+                      Text(
+                        data.difficulty ?? 'Easy',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (data.rating != null) ...[
+                        const Icon(
+                          Icons.star_rounded,
+                          size: 18,
+                          color: Colors.amber,
+                        ),
+                        AppSpacing.hSm,
+                        Text(
+                          data.rating!.toStringAsFixed(1),
+                          style: AppTextStyles.bodySmall.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ],
@@ -136,3 +196,4 @@ class HomeCard extends StatelessWidget {
     );
   }
 }
+

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_shadows.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/features/home/domain/recipe.dart';
 
 class RecipeDetailCard extends StatelessWidget {
@@ -17,9 +15,10 @@ class RecipeDetailCard extends StatelessWidget {
     this.top,
     this.height,
     this.width,
-    this.mainContainerAlignment = .start,
+    this.mainContainerAlignment = MainAxisAlignment.start,
     this.showDifficulty = false,
   });
+
   final double? bottom;
   final Recipe data;
   final double? top;
@@ -27,25 +26,24 @@ class RecipeDetailCard extends StatelessWidget {
   final double? width;
   final MainAxisAlignment mainContainerAlignment;
   final bool showDifficulty;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // recipeBottomSheet(context);
-        context.pushNamed(AppRoutes.recipeDetail, extra: data);
-      },
+    final cardWidth = width ?? 280.0;
+
+    return Center(
       child: Container(
         height: height ?? 380,
-        width: width ?? 260,
+        width: cardWidth,
         margin: AppInsets.card,
         child: Stack(
-          alignment: .center,
-          clipBehavior: .none,
+          alignment: Alignment.center,
+          clipBehavior: Clip.none,
           children: [
-            //main stack container
+            // Main stack container
             Container(
               padding: AppInsets.lg,
-              width: (width ?? 250) - 10,
+              width: cardWidth - 10,
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: AppRadius.large,
@@ -53,64 +51,65 @@ class RecipeDetailCard extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: mainContainerAlignment,
-                crossAxisAlignment: .center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    data.name ?? 'Missing Name',
+                    data.name ?? 'Delicious Recipe',
                     style: AppTextStyles.headlineMedium,
+                    textAlign: TextAlign.center,
                   ),
                   AppSpacing.vXxl,
-                  showDifficulty
-                      ? Container(
-                          padding: AppInsets.hSm,
-                          decoration: BoxDecoration(
-                            borderRadius: AppRadius.large,
-                            color: AppColors.primary,
-                          ),
-                          child: Text(
-                            '${data.difficulty}',
-                            style: AppTextStyles.bodyLarge.copyWith(
-                              color: AppColors.white,
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
+                  if (showDifficulty && data.difficulty != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      decoration: const BoxDecoration(
+                        borderRadius: AppRadius.large,
+                        color: AppColors.primary,
+                      ),
+                      child: Text(
+                        data.difficulty!,
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
-            //stacked food image
+            // Stacked food image
             Positioned(
               bottom: bottom ?? -50,
               left: 0,
               right: 0,
               top: top ?? 60,
-              child: Container(
-                // clipBehavior: .none,
-                padding: AppInsets.xxl,
-                decoration: BoxDecoration(
-                  shape: .circle,
-                  color: AppColors.background,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(-4, 4),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(4, -4),
-                    ),
-                  ],
-                ),
+              child: Center(
                 child: Container(
-                  // clipBehavior: .none,
-                  padding: AppInsets.card,
+                  width: 200,
+                  height: 200,
                   decoration: BoxDecoration(
-                    shape: .circle,
+                    shape: BoxShape.circle,
                     color: AppColors.background,
-                    image: DecorationImage(
-                      image: NetworkImage(data.image ?? ''),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 16,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: ClipOval(
+                    child: Hero(
+                      tag: 'recipe_image_${data.id}',
+                      child: Image.network(
+                        data.image ?? '',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.fastfood, size: 64, color: AppColors.primary),
+                      ),
                     ),
                   ),
                 ),
@@ -121,37 +120,5 @@ class RecipeDetailCard extends StatelessWidget {
       ),
     );
   }
-
-  //   void recipeBottomSheet(BuildContext context) {
-  //     showModalBottomSheet(
-  //       context: context,
-  //       isScrollControlled: true,
-  //       useSafeArea: true,
-  //       clipBehavior: Clip.hardEdge,
-  //       builder: (context) {
-  //         return DraggableScrollableSheet(
-  //           initialChildSize: 0.5,
-  //           minChildSize: 0.2,
-  //           maxChildSize: 0.9,
-  //           expand: false,
-  //           builder: (context, scrollController) {
-  //             return CustomScrollView(
-  //               controller: scrollController,
-  //               slivers: [
-  //                 SliverPadding(
-  //                   padding: AppInsets.lg,
-  //                   sliver: SliverToBoxAdapter(
-  //                     child: Text(
-  //                       'data' * 10000,
-  //                       style: AppTextStyles.headlineMedium,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           },
-  //         );
-  //       },
-  //     );
-  //   }
 }
+
