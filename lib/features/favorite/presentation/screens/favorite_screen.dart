@@ -35,10 +35,10 @@ class FavoriteScreen extends ConsumerWidget {
                 child: Container(
                   color: AppColors.surface,
                   padding: AppInsets.screen,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'My Favorites',
                         style: TextStyle(
                           fontSize: 26,
@@ -46,11 +46,11 @@ class FavoriteScreen extends ConsumerWidget {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () => ref.invalidate(favoriteNotifierProvider),
-                        icon: const Icon(Icons.refresh_rounded),
-                        tooltip: 'Refresh Favorites',
-                      ),
+                      // IconButton(
+                      //   onPressed: () => ref.invalidate(favoriteNotifierProvider),
+                      //   icon: const Icon(Icons.refresh_rounded),
+                      //   tooltip: 'Refresh Favorites',
+                      // ),
                     ],
                   ),
                 ),
@@ -58,12 +58,12 @@ class FavoriteScreen extends ConsumerWidget {
               favoriteState.when(
                 data: (favorites) {
                   if (favorites.isEmpty) {
-                    return SliverFillRemaining(
+                    return const SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.favorite_border_rounded,
                               size: 72,
@@ -105,7 +105,7 @@ class FavoriteScreen extends ConsumerWidget {
                           background: Container(
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.only(right: 20),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: AppColors.error,
                               borderRadius: AppRadius.large,
                             ),
