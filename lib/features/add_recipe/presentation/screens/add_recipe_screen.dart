@@ -341,11 +341,11 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       if (mounted) {
         _resetForm();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: AppRadius.large),
-            content: const Text(
+            content: Text(
               '🎉 Recipe saved successfully to your collection!',
               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -485,7 +485,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Recipe Name'),
+        const SectionHeader.name(header: 'Recipe Name'),
         AppSpacing.vSm,
         RecipeTextField(
           controller: _nameController,
@@ -505,7 +505,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Description'),
+        const SectionHeader.name(header: 'Description'),
         AppSpacing.vSm,
         RecipeTextField(
           controller: _descriptionController,
@@ -520,7 +520,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Difficulty'),
+        const SectionHeader.name(header: 'Difficulty'),
         AppSpacing.vSm,
         DifficultySelector(
           selectedDifficulty: _selectedDifficulty,
@@ -538,7 +538,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Servings'),
+        const SectionHeader.name(header: 'Servings'),
         AppSpacing.vSm,
         RecipeTextField(
           controller: _servingsController,
@@ -560,7 +560,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Cooking Time'),
+        const SectionHeader.name(header: 'Cooking Time'),
         AppSpacing.vSm,
         Row(
           children: [
@@ -597,7 +597,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Cuisine'),
+        const SectionHeader.name(header: 'Cuisine'),
         AppSpacing.vSm,
         DropdownButtonFormField<String>(
           initialValue: _selectedCuisine,
@@ -622,7 +622,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Meal Type'),
+        const SectionHeader.name(header: 'Meal Type'),
         AppSpacing.vSm,
         Wrap(
           spacing: 8,
@@ -662,7 +662,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Ingredients'),
+        const SectionHeader.name(header: 'Ingredients'),
         AppSpacing.vSm,
         ...List.generate(
           _ingredientControllers.length,
@@ -693,7 +693,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Instructions'),
+        const SectionHeader.name(header: 'Instructions'),
         AppSpacing.vSm,
         ...List.generate(
           _instructionControllers.length,
@@ -749,7 +749,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader.name(header: 'Tags'),
+        const SectionHeader.name(header: 'Tags'),
         AppSpacing.vSm,
         Wrap(
           spacing: 8,
@@ -832,4 +832,4 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       ),
     );
   }
-}
+}

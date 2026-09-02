@@ -74,6 +74,7 @@ class _SignUpContainerState extends ConsumerState<SignUpContainer> {
     await ref.read(authProvider.notifier).createUserWithEmailAndPassword(
           email: email,
           password: password,
+          name: username
         );
 
     if (!mounted) return;

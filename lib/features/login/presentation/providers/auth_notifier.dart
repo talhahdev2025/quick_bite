@@ -63,11 +63,13 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
+    required String name
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
       await _authRepository.createUserWithEmailAndPassword(
+        name: name,
         email: email,
         password: password,
       );

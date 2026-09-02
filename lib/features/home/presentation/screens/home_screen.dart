@@ -109,13 +109,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ],
                           ),
                           IconButton(
-                            onPressed: authState.isLoading ? null : _handleSignOut,
+                            onPressed: authState.isLoading
+                                ? null
+                                : _handleSignOut,
                             tooltip: 'Sign Out',
                             icon: authState.isLoading
                                 ? const SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   )
                                 : const Icon(
                                     Icons.logout_rounded,
@@ -129,7 +133,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       TextField(
                         controller: _searchController,
                         onChanged: (value) {
-                          ref.read(searchQueryProvider.notifier).setQuery(value);
+                          ref
+                              .read(searchQueryProvider.notifier)
+                              .setQuery(value);
                         },
                         decoration: InputDecoration(
                           hintText: 'Search by recipe, cuisine, or tags...',
@@ -145,19 +151,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   icon: const Icon(Icons.clear_rounded),
                                   onPressed: () {
                                     _searchController.clear();
-                                    ref.read(searchQueryProvider.notifier).clear();
+                                    ref
+                                        .read(searchQueryProvider.notifier)
+                                        .clear();
                                     setState(() {});
                                   },
                                 )
                               : null,
                           filled: true,
                           fillColor: AppColors.background,
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: AppRadius.xLarge,
                           ),
                           focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
                             borderRadius: BorderRadius.all(Radius.circular(24)),
                           ),
                           contentPadding: const EdgeInsets.symmetric(
@@ -232,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               foregroundColor: AppColors.white,
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: AppRadius.large,
                               ),
                             ),
@@ -273,7 +284,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               onPressed: () {
                                 _searchController.clear();
                                 ref.read(searchQueryProvider.notifier).clear();
-                                setState(() {});
+                                // setState(() {});
                               },
                               child: const Text('Clear search'),
                             ),
@@ -284,21 +295,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   }
 
                   return SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     sliver: SliverLayoutBuilder(
                       builder: (context, constraints) {
                         final isWideScreen = constraints.crossAxisExtent > 600;
 
                         if (isWideScreen) {
                           return SliverGrid(
-                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 400,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 0.82,
-                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 400,
+                                  mainAxisSpacing: 16,
+                                  crossAxisSpacing: 16,
+                                  childAspectRatio: 0.82,
+                                ),
                             delegate: SliverChildBuilderDelegate(
-                              (context, index) => HomeCard(data: recipes[index]),
+                              (context, index) =>
+                                  HomeCard(data: recipes[index]),
                               childCount: recipes.length,
                             ),
                           );
@@ -306,7 +322,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                         return SliverList.separated(
                           itemCount: recipes.length,
-                          separatorBuilder: (context, index) => const SizedBox(height: 16),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 16),
                           itemBuilder: (context, index) {
                             return HomeCard(data: recipes[index]);
                           },
@@ -316,9 +333,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   );
                 },
               ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 24),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
             ],
           ),
         ),
