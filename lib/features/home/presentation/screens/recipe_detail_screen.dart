@@ -5,7 +5,7 @@ import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/features/home/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/widgets/favorite_icon.dart';
 import 'package:quick_bite/features/home/presentation/widgets/info_items.dart';
 import 'package:quick_bite/features/home/presentation/widgets/recipe_detail_card.dart';

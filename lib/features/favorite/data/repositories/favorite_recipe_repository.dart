@@ -1,6 +1,6 @@
 import 'package:quick_bite/features/favorite/data/datasources/recipe_local_data_source.dart';
-import 'package:quick_bite/features/home/data/models/recipe_model.dart';
-import 'package:quick_bite/features/home/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class FavoriteRecipeRepository {
   final RecipeLocalDataSource recipeLocalDataSource;

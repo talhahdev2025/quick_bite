@@ -1,5 +1,5 @@
 import 'package:quick_bite/core/database/app_database.dart';
-import 'package:quick_bite/features/home/data/models/recipe_model.dart';
+import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecipeLocalDataSource {

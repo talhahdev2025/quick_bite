@@ -8,7 +8,7 @@ class RecipiesListViewWidget extends ConsumerWidget {
   final Axis scrollDirection;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recipesAsync = ref.watch(recipeProvider);
+    final recipesAsync = ref.watch(recipeStreamProvider);
     return recipesAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) {
@@ -20,7 +20,7 @@ class RecipiesListViewWidget extends ConsumerWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  ref.invalidate(recipeProvider);
+                  ref.invalidate(recipeStreamProvider);
                 },
                 child: const Text('Retry'),
               ),

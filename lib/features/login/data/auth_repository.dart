@@ -25,7 +25,11 @@ class AuthRepository {
       email: email,
       password: password,
     );
-    await userCredential.user?.updateDisplayName(name);
+    // await userCredential.user?.updateDisplayName(name);
+    if (userCredential.user != null) {
+      await userCredential.user!.updateDisplayName(name);
+      await userCredential.user!.reload();
+    }
   }
 
   //sign out
@@ -33,7 +37,7 @@ class AuthRepository {
     return await _auth.signOut();
   }
 
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  Stream<User?> get authStateChanges => _auth.userChanges();
 
   User? get currentUser => _auth.currentUser;
 }

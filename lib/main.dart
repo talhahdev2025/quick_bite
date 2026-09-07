@@ -6,8 +6,14 @@ import 'package:quick_bite/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // final seeder = RecipeSeeder(
+  //   apiDataSource: RecipeRepository(
+  //     recipeRemoteDataSource: RecipeRemoteDataSource(apiClient: ApiClient()),
+  //   ),
+  //   firestore: FirebaseFirestore.instance,
+  // );
+  // await seeder.seedApiRecipesToFirestore();
+  
   runApp(const ProviderScope(child: QuickBite()));
 }

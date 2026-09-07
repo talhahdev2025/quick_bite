@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/features/favorite/presentation/providers/providers.dart';
-import 'package:quick_bite/features/home/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class FavoriteIcon extends ConsumerWidget {
   const FavoriteIcon({super.key, required this.recipe});

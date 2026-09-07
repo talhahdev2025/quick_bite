@@ -6,136 +6,14 @@ import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/dashed_border.dart';
+import 'package:quick_bite/features/add_recipe/presentation/widgets/difficuly_selector.dart';
+import 'package:quick_bite/features/add_recipe/presentation/widgets/recipe_text_field.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/section_header.dart';
 import 'package:quick_bite/features/favorite/presentation/providers/providers.dart';
-import 'package:quick_bite/features/home/data/models/recipe_model.dart';
+import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 import 'package:quick_bite/features/home/presentation/provider/providers.dart';
-
-class DifficultySelector extends StatelessWidget {
-  final String? selectedDifficulty;
-  final ValueChanged<String> onChanged;
-
-  const DifficultySelector({
-    super.key,
-    required this.selectedDifficulty,
-    required this.onChanged,
-  });
-
-  static const difficulties = [
-    'Easy',
-    'Medium',
-    'Hard',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: difficulties.map((difficulty) {
-        final isSelected = selectedDifficulty == difficulty;
-
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: difficulty != difficulties.last ? 8 : 0,
-            ),
-            child: ChoiceChip(
-              label: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  difficulty,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              selected: isSelected,
-              onSelected: (_) {
-                onChanged(difficulty);
-              },
-              showCheckmark: false,
-              labelStyle: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : const Color(0xFF6B7280),
-              ),
-              backgroundColor: Colors.white,
-              selectedColor: AppColors.primary,
-              side: BorderSide(
-                color: isSelected ? AppColors.primary : const Color(0xFFE5E7EB),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class RecipeTextField extends StatelessWidget {
-  final String hintText;
-  final TextEditingController? controller;
-  final TextInputType? keyboardType;
-  final bool obscureText;
-  final Widget? prefixIcon;
-  final Widget? suffixIcon;
-  final int? maxLines;
-  final ValueChanged<String>? onChanged;
-  final String? Function(String?)? validator;
-
-  const RecipeTextField({
-    super.key,
-    required this.hintText,
-    this.controller,
-    this.keyboardType,
-    this.obscureText = false,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.maxLines = 1,
-    this.onChanged,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      maxLines: maxLines,
-      onChanged: onChanged,
-      validator: validator,
-      style: AppTextStyles.bodyLarge,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textHint),
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFD4E0F2), width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.error, width: 1),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
-        ),
-      ),
-    );
-  }
-}
+import 'package:quick_bite/features/recipe/data/repositories/recipe_firestore_repository.dart';
+import 'package:quick_bite/features/recipe/data/repositories/recipe_repository.dart';
 
 class AddRecipeScreen extends ConsumerStatefulWidget {
   const AddRecipeScreen({super.key});
@@ -308,7 +186,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
     if (instructions.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add at least one instruction step')),
+        const SnackBar(
+          content: Text('Please add at least one instruction step'),
+        ),
       );
       return;
     }
@@ -332,12 +212,14 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         reviewCount: 1,
         mealType: _selectedMealType != null ? [_selectedMealType!] : ['Dinner'],
       );
+      //TODO: sent recipe for approval
+      // // Save to SQLite Favorites/Saved recipes
+      // await ref.read(recipeLocalDataSourceProvider).addFavorite(recipeModel);
+      // ref.invalidate(favoriteNotifierProvider);
+      // ref.invalidate(recipeProvider);
 
-      // Save to SQLite Favorites/Saved recipes
-      await ref.read(recipeLocalDataSourceProvider).addFavorite(recipeModel);
-      ref.invalidate(favoriteNotifierProvider);
-      ref.invalidate(recipeProvider);
-
+      await ref.read(recipeFirestoreRepositoryProvider).saveRecipe(recipeModel);
+      //
       if (mounted) {
         _resetForm();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -347,7 +229,10 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
             shape: RoundedRectangleBorder(borderRadius: AppRadius.large),
             content: Text(
               '🎉 Recipe saved successfully to your collection!',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         );
@@ -382,34 +267,32 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                   SliverPadding(
                     padding: AppInsets.hXl,
                     sliver: SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          _buildCoverPhoto(),
-                          AppSpacing.vLg,
-                          _buildRecipeName(),
-                          AppSpacing.vLg,
-                          _buildDescription(),
-                          AppSpacing.vLg,
-                          _buildDifficulty(),
-                          AppSpacing.vLg,
-                          _buildServings(),
-                          AppSpacing.vLg,
-                          _buildCookingTime(),
-                          AppSpacing.vLg,
-                          _buildCuisine(),
-                          AppSpacing.vLg,
-                          _buildMealType(),
-                          AppSpacing.vLg,
-                          _buildIngredients(),
-                          AppSpacing.vLg,
-                          _buildInstructions(),
-                          AppSpacing.vLg,
-                          _buildTags(),
-                          AppSpacing.vXl,
-                          _buildAddButton(),
-                          AppSpacing.vXl,
-                        ],
-                      ),
+                      delegate: SliverChildListDelegate([
+                        _buildCoverPhoto(),
+                        AppSpacing.vLg,
+                        _buildRecipeName(),
+                        AppSpacing.vLg,
+                        _buildDescription(),
+                        AppSpacing.vLg,
+                        _buildDifficulty(),
+                        AppSpacing.vLg,
+                        _buildServings(),
+                        AppSpacing.vLg,
+                        _buildCookingTime(),
+                        AppSpacing.vLg,
+                        _buildCuisine(),
+                        AppSpacing.vLg,
+                        _buildMealType(),
+                        AppSpacing.vLg,
+                        _buildIngredients(),
+                        AppSpacing.vLg,
+                        _buildInstructions(),
+                        AppSpacing.vLg,
+                        _buildTags(),
+                        AppSpacing.vXl,
+                        _buildAddButton(),
+                        AppSpacing.vXl,
+                      ]),
                     ),
                   ),
                 ],
@@ -603,10 +486,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
           initialValue: _selectedCuisine,
           decoration: _dropdownDecoration(hintText: 'Select cuisine'),
           items: _cuisines.map((cuisine) {
-            return DropdownMenuItem(
-              value: cuisine,
-              child: Text(cuisine),
-            );
+            return DropdownMenuItem(value: cuisine, child: Text(cuisine));
           }).toList(),
           onChanged: (value) {
             setState(() {
@@ -664,22 +544,19 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       children: [
         const SectionHeader.name(header: 'Ingredients'),
         AppSpacing.vSm,
-        ...List.generate(
-          _ingredientControllers.length,
-          (index) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: RecipeTextField(
-                controller: _ingredientControllers[index],
-                hintText: 'e.g. 2 cups flour',
-                suffixIcon: IconButton(
-                  onPressed: () => _removeIngredient(index),
-                  icon: const Icon(Icons.close, size: 18),
-                ),
+        ...List.generate(_ingredientControllers.length, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: RecipeTextField(
+              controller: _ingredientControllers[index],
+              hintText: 'e.g. 2 cups flour',
+              suffixIcon: IconButton(
+                onPressed: () => _removeIngredient(index),
+                icon: const Icon(Icons.close, size: 18),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        }),
         TextButton.icon(
           onPressed: _addIngredient,
           icon: const Icon(Icons.add_rounded),
@@ -695,47 +572,44 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       children: [
         const SectionHeader.name(header: 'Instructions'),
         AppSpacing.vSm,
-        ...List.generate(
-          _instructionControllers.length,
-          (index) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 34,
-                    width: 34,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${index + 1}',
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
-                      ),
+        ...List.generate(_instructionControllers.length, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 34,
+                  width: 34,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    '${index + 1}',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  AppSpacing.hSm,
-                  Expanded(
-                    child: RecipeTextField(
-                      controller: _instructionControllers[index],
-                      hintText: 'Describe step ${index + 1}...',
-                      maxLines: 3,
-                      suffixIcon: IconButton(
-                        onPressed: () => _removeInstruction(index),
-                        icon: const Icon(Icons.close, size: 18),
-                      ),
+                ),
+                AppSpacing.hSm,
+                Expanded(
+                  child: RecipeTextField(
+                    controller: _instructionControllers[index],
+                    hintText: 'Describe step ${index + 1}...',
+                    maxLines: 3,
+                    suffixIcon: IconButton(
+                      onPressed: () => _removeInstruction(index),
+                      icon: const Icon(Icons.close, size: 18),
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        }),
         TextButton.icon(
           onPressed: _addInstruction,
           icon: const Icon(Icons.add_rounded),

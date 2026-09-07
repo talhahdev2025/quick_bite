@@ -4,7 +4,7 @@ import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/core/router/router_notifer.dart';
 import 'package:quick_bite/features/add_recipe/presentation/screens/add_recipe_screen.dart';
 import 'package:quick_bite/features/favorite/presentation/screens/favorite_screen.dart';
-import 'package:quick_bite/features/home/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
 import 'package:quick_bite/features/home/presentation/screens/recipe_detail_screen.dart';
 import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';

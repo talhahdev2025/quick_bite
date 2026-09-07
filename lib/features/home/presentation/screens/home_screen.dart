@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
@@ -61,7 +62,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final filteredRecipes = ref.watch(filteredRecipesProvider);
     final authState = ref.watch(authProvider);
     final userName = authState.user?.displayName;
-
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -70,8 +70,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: RefreshIndicator(
             color: AppColors.primary,
             onRefresh: () async {
-              ref.invalidate(recipeProvider);
-              await ref.read(recipeProvider.future);
+              ref.invalidate(recipeStreamProvider);
+              await ref.read(recipeStreamProvider.future);
             },
             child: CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(
@@ -254,7 +254,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                               ),
                               onPressed: () {
-                                ref.invalidate(recipeProvider);
+                                ref.invalidate(recipeStreamProvider);
                               },
                               icon: const Icon(Icons.refresh_rounded),
                               label: const Text('Retry'),

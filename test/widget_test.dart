@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quick_bite/app.dart';
 import 'package:quick_bite/core/widgets/custom_filled_button.dart';
-import 'package:quick_bite/features/home/data/models/recipe_model.dart';
+import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 
 void main() {
   group('QuickBite Unit & Widget Tests', () {

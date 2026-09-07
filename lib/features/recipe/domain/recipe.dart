@@ -15,6 +15,7 @@ class Recipe {
   double? rating;
   int? reviewCount;
   List<String>? mealType;
+  bool isApproved;
 
   Recipe({
     this.id,
@@ -33,7 +34,6 @@ class Recipe {
     this.rating,
     this.reviewCount,
     this.mealType,
+    this.isApproved=false
   });
-
-  
 }

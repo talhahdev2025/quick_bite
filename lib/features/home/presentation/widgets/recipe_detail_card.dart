@@ -5,7 +5,7 @@ import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_shadows.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/features/home/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class RecipeDetailCard extends StatelessWidget {
   const RecipeDetailCard({
