@@ -1,23 +1,26 @@
-class Recipe {
-  int? id;
-  String? name;
-  List<String>? ingredients;
-  List<String>? instructions;
-  int? prepTimeMinutes;
-  int? cookTimeMinutes;
-  int? servings;
-  String? difficulty;
-  String? cuisine;
-  int? caloriesPerServing;
-  List<String>? tags;
-  int? userId;
-  String? image;
-  double? rating;
-  int? reviewCount;
-  List<String>? mealType;
-  bool isApproved;
+import 'package:flutter/foundation.dart';
 
-  Recipe({
+@immutable
+class Recipe {
+  final String? id;
+  final String? name;
+  final List<String>? ingredients;
+  final List<String>? instructions;
+  final int? prepTimeMinutes;
+  final int? cookTimeMinutes;
+  final int? servings;
+  final String? difficulty;
+  final String? cuisine;
+  final int? caloriesPerServing;
+  final List<String>? tags;
+  final String? userId;
+  final String? image;
+  final double? rating;
+  final int? reviewCount;
+  final List<String>? mealType;
+  final bool isApproved;
+
+  const Recipe({
     this.id,
     this.name,
     this.ingredients,
@@ -34,6 +37,6 @@ class Recipe {
     this.rating,
     this.reviewCount,
     this.mealType,
-    this.isApproved=false
+    this.isApproved = false,
   });
 }

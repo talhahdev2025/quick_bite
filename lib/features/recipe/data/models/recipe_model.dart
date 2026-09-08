@@ -5,25 +5,25 @@ import 'package:flutter/foundation.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class RecipeModel {
-  int? id;
-  String? name;
-  List<String>? ingredients;
-  List<String>? instructions;
-  int? prepTimeMinutes;
-  int? cookTimeMinutes;
-  int? servings;
-  String? difficulty;
-  String? cuisine;
-  int? caloriesPerServing;
-  List<String>? tags;
-  int? userId;
-  String? image;
-  double? rating;
-  int? reviewCount;
-  List<String>? mealType;
-  bool isApproved;
+  final String? id; // Changed from int? to String? for Firestore/UUID compatibility
+  final String? name;
+  final List<String>? ingredients;
+  final List<String>? instructions;
+  final int? prepTimeMinutes;
+  final int? cookTimeMinutes;
+  final int? servings;
+  final String? difficulty;
+  final String? cuisine;
+  final int? caloriesPerServing;
+  final List<String>? tags;
+  final String? userId; // Changed from int? to String? for Firebase UID compatibility
+  final String? image;
+  final double? rating;
+  final int? reviewCount;
+  final List<String>? mealType;
+  final bool isApproved;
 
-  RecipeModel({
+  const RecipeModel({
     this.id,
     this.name,
     this.ingredients,
@@ -40,11 +40,11 @@ class RecipeModel {
     this.rating,
     this.reviewCount,
     this.mealType,
-    this.isApproved=false
+    this.isApproved = false,
   });
 
   RecipeModel copyWith({
-    int? id,
+    String? id,
     String? name,
     List<String>? ingredients,
     List<String>? instructions,
@@ -55,11 +55,12 @@ class RecipeModel {
     String? cuisine,
     int? caloriesPerServing,
     List<String>? tags,
-    int? userId,
+    String? userId,
     String? image,
     double? rating,
     int? reviewCount,
     List<String>? mealType,
+    bool? isApproved,
   }) {
     return RecipeModel(
       id: id ?? this.id,
@@ -78,12 +79,13 @@ class RecipeModel {
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
       mealType: mealType ?? this.mealType,
+      isApproved: isApproved ?? this.isApproved,
     );
   }
 
   factory RecipeModel.fromEntity(Recipe recipe) {
     return RecipeModel(
-      id: recipe.id,
+      id: recipe.id?.toString(),
       name: recipe.name,
       ingredients: recipe.ingredients,
       instructions: recipe.instructions,
@@ -94,11 +96,12 @@ class RecipeModel {
       cuisine: recipe.cuisine,
       caloriesPerServing: recipe.caloriesPerServing,
       tags: recipe.tags,
-      userId: recipe.userId,
+      userId: recipe.userId?.toString(),
       image: recipe.image,
       rating: recipe.rating,
       reviewCount: recipe.reviewCount,
       mealType: recipe.mealType,
+      isApproved: recipe.isApproved ?? false,
     );
   }
 
@@ -120,6 +123,7 @@ class RecipeModel {
       rating: rating,
       reviewCount: reviewCount,
       mealType: mealType,
+      isApproved: isApproved,
     );
   }
 
@@ -127,7 +131,6 @@ class RecipeModel {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      // Encode lists to JSON strings for SQLite TEXT columns
       'ingredients': ingredients != null ? jsonEncode(ingredients) : null,
       'instructions': instructions != null ? jsonEncode(instructions) : null,
       'prepTimeMinutes': prepTimeMinutes,
@@ -142,11 +145,11 @@ class RecipeModel {
       'rating': rating,
       'reviewCount': reviewCount,
       'mealType': mealType != null ? jsonEncode(mealType) : null,
+      'isApproved': isApproved ? 1 : 0, // SQLite stores booleans as 1/0
     };
   }
 
   factory RecipeModel.fromMapForSQFLite(Map<String, dynamic> map) {
-    // Helper to safely parse both JSON strings (from SQLite) and List<dynamic> (from API)
     List<String>? parseList(dynamic data) {
       if (data == null) return null;
       if (data is String) {
@@ -160,30 +163,23 @@ class RecipeModel {
     }
 
     return RecipeModel(
-      id: map['id'] != null ? map['id'] as int : null,
+      id: map['id']?.toString(),
       name: map['name'] as String?,
       ingredients: parseList(map['ingredients']),
       instructions: parseList(map['instructions']),
-      prepTimeMinutes: map['prepTimeMinutes'] != null
-          ? map['prepTimeMinutes'] as int
-          : null,
-      cookTimeMinutes: map['cookTimeMinutes'] != null
-          ? map['cookTimeMinutes'] as int
-          : null,
-      servings: map['servings'] != null ? map['servings'] as int : null,
+      prepTimeMinutes: map['prepTimeMinutes'] as int?,
+      cookTimeMinutes: map['cookTimeMinutes'] as int?,
+      servings: map['servings'] as int?,
       difficulty: map['difficulty'] as String?,
       cuisine: map['cuisine'] as String?,
-      caloriesPerServing: map['caloriesPerServing'] != null
-          ? map['caloriesPerServing'] as int
-          : null,
+      caloriesPerServing: map['caloriesPerServing'] as int?,
       tags: parseList(map['tags']),
-      userId: map['userId'] != null ? map['userId'] as int : null,
+      userId: map['userId']?.toString(),
       image: map['image'] as String?,
       rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
-      reviewCount: map['reviewCount'] != null
-          ? map['reviewCount'] as int
-          : null,
+      reviewCount: map['reviewCount'] as int?,
       mealType: parseList(map['mealType']),
+      isApproved: map['isApproved'] == 1 || map['isApproved'] == true,
     );
   }
 
@@ -205,6 +201,7 @@ class RecipeModel {
       'rating': rating,
       'reviewCount': reviewCount,
       'mealType': mealType,
+      'isApproved': isApproved,
     };
   }
 
@@ -224,44 +221,36 @@ class RecipeModel {
     }
 
     return RecipeModel(
-      id: map['id'] != null ? map['id'] as int : null,
+      id: map['id']?.toString(),
       name: map['name'] as String?,
       ingredients: parseStringList(map['ingredients']),
       instructions: parseStringList(map['instructions']),
-      prepTimeMinutes: map['prepTimeMinutes'] != null
-          ? map['prepTimeMinutes'] as int
-          : null,
-      cookTimeMinutes: map['cookTimeMinutes'] != null
-          ? map['cookTimeMinutes'] as int
-          : null,
-      servings: map['servings'] != null ? map['servings'] as int : null,
+      prepTimeMinutes: map['prepTimeMinutes'] as int?,
+      cookTimeMinutes: map['cookTimeMinutes'] as int?,
+      servings: map['servings'] as int?,
       difficulty: map['difficulty'] as String?,
       cuisine: map['cuisine'] as String?,
-      caloriesPerServing: map['caloriesPerServing'] != null
-          ? map['caloriesPerServing'] as int
-          : null,
+      caloriesPerServing: map['caloriesPerServing'] as int?,
       tags: parseStringList(map['tags']),
-      userId: map['userId'] != null ? map['userId'] as int : null,
+      userId: map['userId']?.toString(),
       image: map['image'] as String?,
       rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
-      reviewCount: map['reviewCount'] != null
-          ? map['reviewCount'] as int
-          : null,
+      reviewCount: map['reviewCount'] as int?,
       mealType: parseStringList(map['mealType']),
+      isApproved: map['isApproved'] as bool? ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory RecipeModel.fromJson(Map<String, dynamic> map) =>
-      RecipeModel.fromMap(map);
+  factory RecipeModel.fromJson(Map<String, dynamic> map) => RecipeModel.fromMap(map);
 
   factory RecipeModel.fromJsonString(String source) =>
       RecipeModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Recipes(id: $id, name: $name, ingredients: $ingredients, instructions: $instructions, prepTimeMinutes: $prepTimeMinutes, cookTimeMinutes: $cookTimeMinutes, servings: $servings, difficulty: $difficulty, cuisine: $cuisine, caloriesPerServing: $caloriesPerServing, tags: $tags, userId: $userId, image: $image, rating: $rating, reviewCount: $reviewCount, mealType: $mealType)';
+    return 'RecipeModel(id: $id, name: $name, ingredients: $ingredients, instructions: $instructions, prepTimeMinutes: $prepTimeMinutes, cookTimeMinutes: $cookTimeMinutes, servings: $servings, difficulty: $difficulty, cuisine: $cuisine, caloriesPerServing: $caloriesPerServing, tags: $tags, userId: $userId, image: $image, rating: $rating, reviewCount: $reviewCount, mealType: $mealType, isApproved: $isApproved)';
   }
 
   @override
@@ -283,26 +272,30 @@ class RecipeModel {
         other.image == image &&
         other.rating == rating &&
         other.reviewCount == reviewCount &&
-        listEquals(other.mealType, mealType);
+        listEquals(other.mealType, mealType) &&
+        other.isApproved == isApproved;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        name.hashCode ^
-        ingredients.hashCode ^
-        instructions.hashCode ^
-        prepTimeMinutes.hashCode ^
-        cookTimeMinutes.hashCode ^
-        servings.hashCode ^
-        difficulty.hashCode ^
-        cuisine.hashCode ^
-        caloriesPerServing.hashCode ^
-        tags.hashCode ^
-        userId.hashCode ^
-        image.hashCode ^
-        rating.hashCode ^
-        reviewCount.hashCode ^
-        mealType.hashCode;
+    return Object.hash(
+      id,
+      name,
+      Object.hashAll(ingredients ?? []),
+      Object.hashAll(instructions ?? []),
+      prepTimeMinutes,
+      cookTimeMinutes,
+      servings,
+      difficulty,
+      cuisine,
+      caloriesPerServing,
+      Object.hashAll(tags ?? []),
+      userId,
+      image,
+      rating,
+      reviewCount,
+      Object.hashAll(mealType ?? []),
+      isApproved,
+    );
   }
 }

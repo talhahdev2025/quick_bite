@@ -8,10 +8,8 @@
 //   final RecipeRepository apiDataSource;
 //   final FirebaseFirestore firestore;
 
-//   RecipeSeeder({
-//     required this.apiDataSource,
-//     FirebaseFirestore? firestore,
-//   }) : firestore = firestore ?? FirebaseFirestore.instance;
+//   RecipeSeeder({required this.apiDataSource, FirebaseFirestore? firestore})
+//     : firestore = firestore ?? FirebaseFirestore.instance;
 
 //   Future<void> seedApiRecipesToFirestore() async {
 //     try {
@@ -26,7 +24,8 @@
 //       final collectionRef = firestore.collection('recipes');
 
 //       for (final recipe in apiRecipes) {
-//         final docRef = collectionRef.doc(); // Auto-generates unique Firestore Document Reference
+//         final docRef = collectionRef
+//             .doc(); // Auto-generates unique Firestore Document Reference
 
 //         // 1. Convert domain entity to model map
 //         final recipeModel = RecipeModel.fromEntity(recipe);
@@ -34,13 +33,16 @@
 
 //         // 2. Add approval status and preserve original integer API ID
 //         recipeData['isApproved'] = true;
-//         recipeData['firestoreId'] = docRef.id; // Optional: store document key separately
+//         recipeData['firestoreId'] =
+//             docRef.id; // Optional: store document key separately
 
 //         batch.set(docRef, recipeData);
 //       }
 
 //       await batch.commit();
-//       debugPrint('Successfully seeded ${apiRecipes.length} recipes to Firestore.');
+//       debugPrint(
+//         'Successfully seeded ${apiRecipes.length} recipes to Firestore.',
+//       );
 //     } catch (e) {
 //       debugPrint('Failed to seed recipes: $e');
 //     }

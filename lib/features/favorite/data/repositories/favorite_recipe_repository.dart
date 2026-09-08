@@ -19,11 +19,11 @@ class FavoriteRecipeRepository {
     await recipeLocalDataSource.addFavorite(recipeModel);
   }
 
-  Future<void> removeFavorite(int id) async {
+  Future<void> removeFavorite(String id) async {
     await recipeLocalDataSource.removeFavorite(id);
   }
 
-  Future<bool> isFavorite(int id) async {
+  Future<bool> isFavorite(String id) async {
     return await recipeLocalDataSource.isFavorite(id);
   }
 }

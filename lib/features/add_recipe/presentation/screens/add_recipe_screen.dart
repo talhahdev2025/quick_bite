@@ -197,7 +197,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
     try {
       final recipeModel = RecipeModel(
-        id: DateTime.now().millisecondsSinceEpoch % 1000000,
+        id: (DateTime.now().millisecondsSinceEpoch % 1000000).toString(),
         name: _nameController.text.trim(),
         ingredients: ingredients,
         instructions: instructions,

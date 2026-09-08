@@ -24,13 +24,13 @@ class RecipeLocalDataSource {
   }
 
   // Remove favorite
-  Future<void> removeFavorite(int id) async {
+  Future<void> removeFavorite(String id) async {
     final db = await appDatabase.database;
     await db.delete('recipes', where: 'id = ?', whereArgs: [id]);
   }
 
   // Is favorite or not
-  Future<bool> isFavorite(int id) async {
+  Future<bool> isFavorite(String id) async {
     final db = await appDatabase.database;
     final maps = await db.query('recipes', where: 'id = ?', whereArgs: [id]);
     return maps.isNotEmpty;

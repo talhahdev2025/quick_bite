@@ -25,7 +25,7 @@ class AppDatabase {
   Future<void> _onCreate(Database db, int version) async {
     return await db.execute('''
   CREATE TABLE recipes (
-    id INTEGER PRIMARY KEY,
+    id TEXT PRIMARY KEY,
     name TEXT,
     ingredients TEXT,
     instructions TEXT,
@@ -36,11 +36,12 @@ class AppDatabase {
     cuisine TEXT,
     caloriesPerServing INTEGER,
     tags TEXT,
-    userId INTEGER,
+    userId TEXT,
     image TEXT,
     rating REAL,
     reviewCount INTEGER,
-    mealType TEXT
+    mealType TEXT,
+    isApproved INTEGER DEFAULT 0
   )
 ''');
   }
