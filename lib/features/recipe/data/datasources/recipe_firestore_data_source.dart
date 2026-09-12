@@ -20,7 +20,21 @@ class RecipeFirestoreDataSource {
         .map((snapshot) {
           return snapshot.docs.map((doc) {
             final data = doc.data();
-            return RecipeModel.fromMap({...data,'firestoreId':doc.id});
+            return RecipeModel.fromMap({...data, 'firestoreId': doc.id});
+          }).toList();
+        });
+  }
+
+  Stream<List<RecipeModel>> getPendingRecipes() {
+    return  _firestore
+        .collection('recipes')
+        .where('isApproved', isEqualTo: false)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            
+            return RecipeModel.fromMap(data);
           }).toList();
         });
   }

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quick_bite/features/login/data/auth_repository.dart';
+import 'package:quick_bite/features/login/data/models/user_model.dart';
+import 'package:quick_bite/features/login/data/repository/auth_repository.dart';
+import 'package:quick_bite/features/login/data/repository/user_repository.dart';
 import 'package:quick_bite/features/login/domain/auth_state.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
@@ -15,6 +18,20 @@ final authStateStreamProvider = StreamProvider<User?>(
   (ref) => ref.watch(authRepositoryProvider).authStateChanges,
 );
 
+//
+final firebaseAuthProvider = Provider<FirebaseAuth>(
+  (ref) => FirebaseAuth.instance,
+);
+
+final firestoreProvider = Provider<FirebaseFirestore>(
+  (ref) => FirebaseFirestore.instance,
+);
+
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  return UserRepository(firestore: ref.watch(firestoreProvider));
+});
+
+//
 class AuthNotifier extends Notifier<AuthState> {
   late final AuthRepository _authRepository;
   @override
@@ -22,15 +39,36 @@ class AuthNotifier extends Notifier<AuthState> {
     _authRepository = ref.read(authRepositoryProvider);
     _listenToAuthChanges();
 
-    return AuthState(user: _authRepository.currentUser);
+    return AuthState(firebaseUser: _authRepository.currentUser);
   }
 
   void _listenToAuthChanges() {
     ref.listen<AsyncValue<User?>>(
       authStateStreamProvider,
-      (previous, next) => next.whenData(
-        (user) => state = state.copyWith(user: user, isLoading: false),
-      ),
+      (previous, next) => next.whenData((firebaseUser) async {
+        if (firebaseUser == null) {
+          state = AuthState(firebaseUser: null, user: null, isLoading: false);
+          return;
+        }
+
+        try {
+          final appUser = await ref
+              .read(userRepositoryProvider)
+              .getUser(firebaseUser.uid);
+          state = state.copyWith(
+            firebaseUser: firebaseUser,
+            user: appUser,
+            isLoading: false,
+          );
+        } catch (e) {
+          state = state.copyWith(
+            firebaseUser: firebaseUser,
+            isLoading: false,
+            errorMessage: 'Failed to load user profile',
+          );
+        }
+
+      }),
     );
   }
 
@@ -42,9 +80,26 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
-      await _authRepository.signInWithEmailAndPassword(
+      final userCredential = await _authRepository.signInWithEmailAndPassword(
         email: email,
         password: password,
+      );
+      final firebaseUser = userCredential.user;
+      if (firebaseUser == null) {
+        throw Exception('user now found');
+      }
+
+      final appUser = await ref
+          .read(userRepositoryProvider)
+          .getUser(firebaseUser.uid);
+      if (appUser == null) {
+        throw Exception('User document not found');
+      }
+
+      state = state.copyWith(
+        isLoading: false,
+        user: appUser,
+        firebaseUser: firebaseUser,
       );
     } on FirebaseAuthException catch (e) {
       state = state.copyWith(
@@ -63,16 +118,30 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
-    required String name
+    required String name,
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
-      await _authRepository.createUserWithEmailAndPassword(
+      final credential = await _authRepository.createUserWithEmailAndPassword(
         name: name,
         email: email,
         password: password,
       );
+      final firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw Exception('User creation failed');
+      }
+
+      final user = UserModel(
+        uid: firebaseUser.uid,
+        name: name,
+        email: email,
+        role: 'student',
+      );
+      await ref.read(userRepositoryProvider).createUser(user);
+
+      state = state.copyWith(firebaseUser: firebaseUser, isLoading: false,user: user);
     } on FirebaseAuthException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -91,7 +160,7 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       await _authRepository.signOut();
-      state =  AuthState(user: null, isLoading: false);
+      state = AuthState(firebaseUser: null, isLoading: false,user: null);
     } catch (_) {
       state = state.copyWith(
         isLoading: false,

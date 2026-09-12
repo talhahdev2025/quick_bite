@@ -16,7 +16,7 @@ class AuthRepository {
   }
 
   //sign up
-  Future<void> createUserWithEmailAndPassword({
+  Future<UserCredential> createUserWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -25,11 +25,13 @@ class AuthRepository {
       email: email,
       password: password,
     );
+
     // await userCredential.user?.updateDisplayName(name);
     if (userCredential.user != null) {
       await userCredential.user!.updateDisplayName(name);
       await userCredential.user!.reload();
     }
+    return userCredential;
   }
 
   //sign out

@@ -71,18 +71,20 @@ class _SignUpContainerState extends ConsumerState<SignUpContainer> {
       return;
     }
 
-    await ref.read(authProvider.notifier).createUserWithEmailAndPassword(
+    await ref
+        .read(authProvider.notifier)
+        .createUserWithEmailAndPassword(
           email: email,
           password: password,
-          name: username
+          name: username,
         );
 
     if (!mounted) return;
 
     final state = ref.read(authProvider);
     if (state.errorMessage == null && state.isLoggedIn) {
-      if (username.isNotEmpty && state.user != null) {
-        await state.user!.updateDisplayName(username);
+      if (username.isNotEmpty && state.firebaseUser != null) {
+        await state.firebaseUser!.updateDisplayName(username);
       }
       if (!mounted) return;
       context.go(AppRoutes.homePath);
@@ -110,7 +112,10 @@ class _SignUpContainerState extends ConsumerState<SignUpContainer> {
           controller: _userNameController,
           autoFocus: true,
           labelText: 'User name',
-          prefixIcon: const Icon(Icons.person_outline, color: AppColors.textSecondary),
+          prefixIcon: const Icon(
+            Icons.person_outline,
+            color: AppColors.textSecondary,
+          ),
         ),
         AppSpacing.vLg,
         LoginCustomTextField(
@@ -120,7 +125,10 @@ class _SignUpContainerState extends ConsumerState<SignUpContainer> {
           keyboardType: TextInputType.emailAddress,
           controller: _emailController,
           labelText: 'Email address',
-          prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textSecondary),
+          prefixIcon: const Icon(
+            Icons.email_outlined,
+            color: AppColors.textSecondary,
+          ),
         ),
         AppSpacing.vLg,
         LoginCustomTextField(
@@ -130,7 +138,10 @@ class _SignUpContainerState extends ConsumerState<SignUpContainer> {
           controller: _passwordController,
           labelText: 'Password',
           obscureText: true,
-          prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textSecondary),
+          prefixIcon: const Icon(
+            Icons.lock_outline,
+            color: AppColors.textSecondary,
+          ),
         ),
         AppSpacing.vXl,
         CustomFilledButton(
@@ -142,4 +153,3 @@ class _SignUpContainerState extends ConsumerState<SignUpContainer> {
     );
   }
 }
-

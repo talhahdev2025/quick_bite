@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/core/router/router_notifer.dart';
 import 'package:quick_bite/features/add_recipe/presentation/screens/add_recipe_screen.dart';
+import 'package:quick_bite/features/admin/presentation/screens/admin_dashboard_screen.dart';
+import 'package:quick_bite/features/admin/presentation/screens/pending_recipes_screen.dart';
 import 'package:quick_bite/features/favorite/presentation/screens/favorite_screen.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
@@ -14,7 +16,8 @@ import 'package:quick_bite/features/splash/screens/splash_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.watch(routerNotifierProvider.notifier);
-
+  // final authState = ref.read(authProvider);
+  // final bool isAdmin=authState.user?.role=='admin';
   return GoRouter(
     initialLocation: AppRoutes.splashPath,
     refreshListenable: notifier,
@@ -33,8 +36,13 @@ final routerProvider = Provider<GoRouter>((ref) {
     },
     routes: [
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            MainNavigation(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) {
+          final authState = ref.read(authProvider);
+          return MainNavigation(
+            navigationShell: navigationShell,
+            isAdmin: authState.user?.role == 'admin',
+          );
+        },
         branches: [
           //home screen branch
           StatefulShellBranch(
@@ -73,6 +81,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.favoritePath,
                 name: AppRoutes.favorite,
                 builder: (context, state) => const FavoriteScreen(),
+              ),
+            ],
+          ),
+          //admin dashboard
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.adminDashboardPath,
+                name: AppRoutes.adminDashboard,
+                builder: (context, state) => const PendingRecipesScreen(),
               ),
             ],
           ),

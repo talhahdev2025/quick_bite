@@ -19,6 +19,13 @@ class RecipeRepository {
       return models.map((model) => model.toEntity()).toList();
     });
   }
+
+  //get pending recipes
+  Stream<List<Recipe>> getPendingRecipes() {
+    return _remoteDataSource.getPendingRecipes().map(
+      (models) => models.map((model) => model.toEntity()).toList(),
+    );
+  }
 }
 
 final recipeFirestoreDataSourceProvider = Provider<RecipeFirestoreDataSource>(

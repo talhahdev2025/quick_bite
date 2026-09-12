@@ -61,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final filteredRecipes = ref.watch(filteredRecipesProvider);
     final authState = ref.watch(authProvider);
-    final userName = authState.user?.displayName;
+    final userName = authState.firebaseUser?.displayName;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
