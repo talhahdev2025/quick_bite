@@ -3,8 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/core/router/router_notifer.dart';
 import 'package:quick_bite/features/add_recipe/presentation/screens/add_recipe_screen.dart';
-import 'package:quick_bite/features/admin/presentation/screens/admin_dashboard_screen.dart';
-import 'package:quick_bite/features/admin/presentation/screens/pending_recipes_screen.dart';
+import 'package:quick_bite/features/admin/presentation/screens/dashboard_screen.dart';
 import 'package:quick_bite/features/favorite/presentation/screens/favorite_screen.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
@@ -90,7 +89,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.adminDashboardPath,
                 name: AppRoutes.adminDashboard,
-                builder: (context, state) => const PendingRecipesScreen(),
+                builder: (context, state) => const DashboardScreen(),
               ),
             ],
           ),
