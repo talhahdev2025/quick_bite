@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:quick_bite/core/router/app_routes.dart';
+import 'package:quick_bite/features/home/presentation/provider/providers.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart'; // Adjust path if needed
 
 class PendingRecipeCard extends ConsumerWidget {
   final Recipe recipe;
   final VoidCallback? onViewRecipe;
 
-  const PendingRecipeCard({
-    super.key,
-    required this.recipe,
-    this.onViewRecipe,
-  });
+  const PendingRecipeCard({super.key, required this.recipe, this.onViewRecipe});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,9 +18,7 @@ class PendingRecipeCard extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 2.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -80,9 +77,12 @@ class PendingRecipeCard extends ConsumerWidget {
 
             // View Recipe Full Width Action Button
             OutlinedButton.icon(
-              onPressed: onViewRecipe ?? () {
-                // Navigate to details screen, e.g. context.push('/recipe/${recipe.id}');
-              },
+              onPressed:
+                  onViewRecipe ??
+                  () {
+                    // Navigate to details screen, e.g. context.push('/recipe/${recipe.id}');
+                    context.pushNamed(AppRoutes.recipeDetail, extra: recipe);
+                  },
               icon: const Icon(Icons.visibility_outlined, size: 18),
               label: const Text('View Recipe'),
               style: OutlinedButton.styleFrom(
@@ -136,19 +136,19 @@ class PendingRecipeCard extends ConsumerWidget {
       width: 56,
       height: 56,
       color: theme.colorScheme.surfaceContainerHigh,
-      child: const Center(
-        child: Text('🍛', style: TextStyle(fontSize: 28)),
-      ),
+      child: const Center(child: Text('🍛', style: TextStyle(fontSize: 28))),
     );
   }
 
   void _handleApprove(BuildContext context, WidgetRef ref) {
     if (recipe.id == null) return;
     // Example: ref.read(adminControllerProvider.notifier).approveRecipe(recipe.id!);
+    ref.read(recipeRepositoryProvider).approveRecipe(recipe.id!);
   }
 
   void _handleReject(BuildContext context, WidgetRef ref) {
     if (recipe.id == null) return;
     // Example: ref.read(adminControllerProvider.notifier).rejectRecipe(recipe.id!);
+    ref.read(recipeRepositoryProvider).rejectRecipe(recipe.id!);
   }
 }

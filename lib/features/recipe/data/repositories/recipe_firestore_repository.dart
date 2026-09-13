@@ -7,6 +7,15 @@ class RecipeRepository {
   final RecipeFirestoreDataSource _remoteDataSource;
 
   RecipeRepository({required this._remoteDataSource});
+  
+  //approve recipe
+  Future<void> approveRecipe(String recipeId)async{
+    await _remoteDataSource.approveRecipe(recipeId);
+  }
+  //
+  Future<void> rejectRecipe(String recipeId)async{
+    await _remoteDataSource.rejectRecipe(recipeId);
+  }
   //save recipe
   Future<void> saveRecipe(RecipeModel recipeModel) {
     final recipe = recipeModel.toMap();

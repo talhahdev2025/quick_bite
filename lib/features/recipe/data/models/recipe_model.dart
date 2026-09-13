@@ -22,7 +22,8 @@ class RecipeModel {
   final double? rating;
   final int? reviewCount;
   final List<String>? mealType;
-  final bool isApproved;
+  final String status;
+  final String? rejectionReason;
 
   const RecipeModel({
     this.id,
@@ -41,7 +42,8 @@ class RecipeModel {
     this.rating,
     this.reviewCount,
     this.mealType,
-    this.isApproved = false,
+    this.status = 'pending',
+    this.rejectionReason,
   });
 
   RecipeModel copyWith({
@@ -61,7 +63,8 @@ class RecipeModel {
     double? rating,
     int? reviewCount,
     List<String>? mealType,
-    bool? isApproved,
+    String? status,
+    String? rejectionReason,
   }) {
     return RecipeModel(
       id: id ?? this.id,
@@ -80,7 +83,8 @@ class RecipeModel {
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
       mealType: mealType ?? this.mealType,
-      isApproved: isApproved ?? this.isApproved,
+      status: status ?? this.status,
+      rejectionReason: rejectionReason ?? this.rejectionReason,
     );
   }
 
@@ -102,7 +106,8 @@ class RecipeModel {
       rating: recipe.rating,
       reviewCount: recipe.reviewCount,
       mealType: recipe.mealType,
-      isApproved: recipe.isApproved ?? false,
+      status: recipe.status,
+      rejectionReason: recipe.rejectionReason,
     );
   }
 
@@ -124,7 +129,8 @@ class RecipeModel {
       rating: rating,
       reviewCount: reviewCount,
       mealType: mealType,
-      isApproved: isApproved,
+      status: status,
+      rejectionReason: rejectionReason,
     );
   }
 
@@ -146,7 +152,8 @@ class RecipeModel {
       'rating': rating,
       'reviewCount': reviewCount,
       'mealType': mealType != null ? jsonEncode(mealType) : null,
-      'isApproved': isApproved ? 1 : 0, // SQLite stores booleans as 1/0
+      'status': status,
+      'rejectionReason': rejectionReason,
     };
   }
 
@@ -180,13 +187,14 @@ class RecipeModel {
       rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
       reviewCount: map['reviewCount'] as int?,
       mealType: parseList(map['mealType']),
-      isApproved: map['isApproved'] == 1 || map['isApproved'] == true,
+      status: map['status'] as String? ?? 'pending',
+      rejectionReason: map['rejectionReason'] as String?,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      // 'id': id,
       'name': name,
       'ingredients': ingredients,
       'instructions': instructions,
@@ -202,11 +210,12 @@ class RecipeModel {
       'rating': rating,
       'reviewCount': reviewCount,
       'mealType': mealType,
-      'isApproved': isApproved,
+      'status': status,
+      'rejectionReason': rejectionReason,
     };
   }
 
-  factory RecipeModel.fromMap(Map<String, dynamic> map) {
+  factory RecipeModel.fromMap(Map<String, dynamic> map, {String? docId}) {
     List<String>? parseStringList(dynamic data) {
       if (data == null) return null;
       if (data is List) {
@@ -222,7 +231,7 @@ class RecipeModel {
     }
 
     return RecipeModel(
-      id: map['id']?.toString(),
+      id: docId ?? map['id']?.toString(),
       name: map['name'] as String?,
       ingredients: parseStringList(map['ingredients']),
       instructions: parseStringList(map['instructions']),
@@ -238,7 +247,8 @@ class RecipeModel {
       rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
       reviewCount: map['reviewCount'] as int?,
       mealType: parseStringList(map['mealType']),
-      isApproved: map['isApproved'] as bool? ?? false,
+      status: map['status'] as String? ?? 'pending',
+      rejectionReason: map['rejectionReason'] as String?,
     );
   }
 
@@ -251,7 +261,7 @@ class RecipeModel {
 
   @override
   String toString() {
-    return 'RecipeModel(id: $id, name: $name, ingredients: $ingredients, instructions: $instructions, prepTimeMinutes: $prepTimeMinutes, cookTimeMinutes: $cookTimeMinutes, servings: $servings, difficulty: $difficulty, cuisine: $cuisine, caloriesPerServing: $caloriesPerServing, tags: $tags, userId: $userId, image: $image, rating: $rating, reviewCount: $reviewCount, mealType: $mealType, isApproved: $isApproved)';
+    return 'RecipeModel(id: $id, name: $name, ingredients: $ingredients, instructions: $instructions, prepTimeMinutes: $prepTimeMinutes, cookTimeMinutes: $cookTimeMinutes, servings: $servings, difficulty: $difficulty, cuisine: $cuisine, caloriesPerServing: $caloriesPerServing, tags: $tags, userId: $userId, image: $image, rating: $rating, reviewCount: $reviewCount, mealType: $mealType, status: $status, rejectionReason: $rejectionReason)';
   }
 
   @override
@@ -274,7 +284,8 @@ class RecipeModel {
         other.rating == rating &&
         other.reviewCount == reviewCount &&
         listEquals(other.mealType, mealType) &&
-        other.isApproved == isApproved;
+        other.status == status &&
+        other.rejectionReason == rejectionReason;
   }
 
   @override
@@ -296,7 +307,8 @@ class RecipeModel {
       rating,
       reviewCount,
       Object.hashAll(mealType ?? []),
-      isApproved,
+      status,
+      rejectionReason,
     );
   }
 }

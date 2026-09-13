@@ -10,6 +10,7 @@ import 'package:quick_bite/features/add_recipe/presentation/widgets/difficuly_se
 import 'package:quick_bite/features/add_recipe/presentation/widgets/recipe_text_field.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/section_header.dart';
 import 'package:quick_bite/features/favorite/presentation/providers/providers.dart';
+import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 import 'package:quick_bite/features/home/presentation/provider/providers.dart';
 import 'package:quick_bite/features/recipe/data/repositories/recipe_firestore_repository.dart';
@@ -197,7 +198,8 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
     try {
       final recipeModel = RecipeModel(
-        id: (DateTime.now().millisecondsSinceEpoch % 1000000).toString(),
+        // id: (DateTime.now().millisecondsSinceEpoch % 1000000).toString(),
+        id: null,
         name: _nameController.text.trim(),
         ingredients: ingredients,
         instructions: instructions,
@@ -210,6 +212,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         image: 'https://cdn.dummyjson.com/recipe-images/1.webp',
         rating: 5.0,
         reviewCount: 1,
+        status: 'pending',
+        rejectionReason: null,
+        userId: ref.read(authProvider).user?.uid,
         mealType: _selectedMealType != null ? [_selectedMealType!] : ['Dinner'],
       );
       //TODO: sent recipe for approval

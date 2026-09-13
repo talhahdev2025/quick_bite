@@ -5,3 +5,4 @@ import 'package:quick_bite/features/recipe/domain/recipe.dart';
 final pendingRecipesProvider = StreamProvider<List<Recipe>>(
   (ref) => ref.watch(recipeRepositoryProvider).getPendingRecipes(),
 );
+

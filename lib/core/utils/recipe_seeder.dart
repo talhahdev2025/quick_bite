@@ -32,8 +32,8 @@
 //         final Map<String, dynamic> recipeData = recipeModel.toMap();
 
 //         // 2. Add approval status and preserve original integer API ID
-//         recipeData['isApproved'] = true;
-//         recipeData['firestoreId'] =
+//         recipeData['status'] = 'approved';
+//         recipeData['id'] =
 //             docRef.id; // Optional: store document key separately
 
 //         batch.set(docRef, recipeData);

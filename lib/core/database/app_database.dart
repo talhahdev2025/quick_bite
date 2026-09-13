@@ -41,7 +41,7 @@ class AppDatabase {
     rating REAL,
     reviewCount INTEGER,
     mealType TEXT,
-    isApproved INTEGER DEFAULT 0
+    status TEXT
   )
 ''');
   }

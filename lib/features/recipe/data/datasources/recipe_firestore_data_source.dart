@@ -7,34 +7,50 @@ class RecipeFirestoreDataSource {
   RecipeFirestoreDataSource({FirebaseFirestore? firestore})
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
+  //approve recipe
+  Future<void> approveRecipe(String recipeId) async {
+    await _firestore.collection('recipes').doc(recipeId).update({
+      'status': 'approved',
+    });
+  }
+
+  //reject recipe
+  Future<void> rejectRecipe(String recipeId) async {
+    await _firestore.collection('recipes').doc(recipeId).update({
+      'status': 'rejected',
+      'rejectionReason': 'Please add clearer step by step instructions',
+    });
+  }
+
   //add recipe
   Future<void> addRecipe(Map<String, dynamic> recipe) async {
-    await _firestore.collection('recipes').doc().set(recipe);
+    // await _firestore.collection('recipes').doc().set(recipe);
+    await _firestore.collection('recipes').add(recipe);
   }
 
   Stream<List<RecipeModel>> getRecipes() {
     return _firestore
         .collection('recipes')
-        .where('isApproved', isEqualTo: true)
+        .where('status', isEqualTo: 'approved')
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
             final data = doc.data();
-            return RecipeModel.fromMap({...data, 'firestoreId': doc.id});
+            return RecipeModel.fromMap({...data, 'id': doc.id});
           }).toList();
         });
   }
 
   Stream<List<RecipeModel>> getPendingRecipes() {
-    return  _firestore
+    return _firestore
         .collection('recipes')
-        .where('isApproved', isEqualTo: false)
+        .where('status', isEqualTo: 'pending')
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
             final data = doc.data();
-            
-            return RecipeModel.fromMap(data);
+
+            return RecipeModel.fromMap({...data, 'id': doc.id});
           }).toList();
         });
   }
