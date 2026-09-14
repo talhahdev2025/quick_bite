@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quick_bite/core/constants/app_colors.dart';
+import 'package:quick_bite/core/constants/app_insets.dart';
+import 'package:quick_bite/core/constants/app_radius.dart';
+import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
-import 'package:quick_bite/features/home/presentation/provider/providers.dart';
-import 'package:quick_bite/features/recipe/domain/recipe.dart'; // Adjust path if needed
+import 'package:quick_bite/features/admin/presentation/providers/providers.dart';
+import 'package:quick_bite/features/admin/presentation/widgets/reject_reason_bottom_sheet.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class PendingRecipeCard extends ConsumerWidget {
   final Recipe recipe;
@@ -13,112 +18,162 @@ class PendingRecipeCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      elevation: 2.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadius.large,
+        border: Border.all(color: AppColors.divider),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: AppInsets.card,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header Row: Recipe Image + Name
+            // Header Row: Recipe Image + Name & Metadata
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: AppRadius.medium,
                   child: recipe.image != null && recipe.image!.isNotEmpty
                       ? Image.network(
                           recipe.image!,
-                          width: 56,
-                          height: 56,
+                          width: AppSizes.imageMedium,
+                          height: AppSizes.imageMedium,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
-                              _buildImagePlaceholder(theme),
+                              _buildImagePlaceholder(),
                         )
-                      : _buildImagePlaceholder(theme),
+                      : _buildImagePlaceholder(),
                 ),
-                const SizedBox(width: 12.0),
+                const SizedBox(width: AppSizes.md),
                 Expanded(
-                  child: Text(
-                    recipe.name ?? 'Untitled Recipe',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        recipe.name ?? 'Untitled Recipe',
+                        style: const TextStyle(
+                          fontSize: AppSizes.lg,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppSizes.xs),
+                      if (recipe.userId != null)
+                        Text(
+                          'Submitted by: ${recipe.userId}',
+                          style: const TextStyle(
+                            fontSize: AppSizes.md - 1,
+                            color: AppColors.textSecondary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      if (recipe.cuisine != null) ...[
+                        const SizedBox(height: AppSizes.xs / 2),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.sm,
+                            vertical: AppSizes.xs / 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: AppRadius.small,
+                          ),
+                          child: Text(
+                            recipe.cuisine!,
+                            style: const TextStyle(
+                              fontSize: AppSizes.md - 2,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12.0),
+            const SizedBox(height: AppSizes.md),
 
-            // Metadata: Author & Cuisine
-            if (recipe.userId != null) ...[
-              Text(
-                'Submitted by: ${recipe.userId}', // Replace with user name if available
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 4.0),
-            ],
-            if (recipe.cuisine != null) ...[
-              Text(
-                'Category: ${recipe.cuisine}',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 12.0),
-            ],
-
-            // View Recipe Full Width Action Button
+            // View Recipe Action Button
             OutlinedButton.icon(
-              onPressed:
-                  onViewRecipe ??
-                  () {
-                    // Navigate to details screen, e.g. context.push('/recipe/${recipe.id}');
-                    context.pushNamed(AppRoutes.recipeDetail, extra: recipe);
-                  },
-              icon: const Icon(Icons.visibility_outlined, size: 18),
-              label: const Text('View Recipe'),
+              onPressed: onViewRecipe ??
+                  () => context.pushNamed(AppRoutes.recipeDetail, extra: recipe),
+              icon: const Icon(
+                Icons.visibility_outlined,
+                size: AppSizes.iconSmall,
+              ),
+              label: const Text('View Full Recipe'),
               style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.divider),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: AppRadius.medium,
                 ),
+                padding: AppInsets.vSm,
               ),
             ),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: AppSizes.sm),
 
             // Decision Buttons: Reject vs Approve
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => _handleReject(context, ref),
+                    onPressed: () async {
+                      final String? rejectReason =
+                          await RejectReasonBottomSheet.show(context);
+                      if (rejectReason != null && rejectReason.isNotEmpty) {
+                        await ref
+                            .read(pendingRecipesNotifierProvider.notifier)
+                            .rejectRecipe(
+                              recipeId: recipe.id!,
+                              rejectReason: rejectReason,
+                            );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Recipe rejected successfully.'),
+                            ),
+                          );
+                        }
+                      }
+                    },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: theme.colorScheme.error,
-                      side: BorderSide(color: theme.colorScheme.error),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      foregroundColor: AppColors.error,
+                      side: const BorderSide(color: AppColors.error),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: AppRadius.medium,
                       ),
+                      padding: AppInsets.vSm,
                     ),
                     child: const Text('Reject'),
                   ),
                 ),
-                const SizedBox(width: 12.0),
+                const SizedBox(width: AppSizes.md),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () => _handleApprove(context, ref),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      elevation: 0,
+                      backgroundColor: AppColors.success,
+                      foregroundColor: AppColors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: AppRadius.medium,
                       ),
+                      padding: AppInsets.vSm,
                     ),
                     child: const Text('Approve'),
                   ),
@@ -131,24 +186,19 @@ class PendingRecipeCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildImagePlaceholder(ThemeData theme) {
+  Widget _buildImagePlaceholder() {
     return Container(
-      width: 56,
-      height: 56,
-      color: theme.colorScheme.surfaceContainerHigh,
-      child: const Center(child: Text('🍛', style: TextStyle(fontSize: 28))),
+      width: AppSizes.imageMedium,
+      height: AppSizes.imageMedium,
+      color: AppColors.background,
+      child: const Center(
+        child: Text('🍛', style: TextStyle(fontSize: AppSizes.iconXLarge)),
+      ),
     );
   }
 
   void _handleApprove(BuildContext context, WidgetRef ref) {
     if (recipe.id == null) return;
-    // Example: ref.read(adminControllerProvider.notifier).approveRecipe(recipe.id!);
-    ref.read(recipeRepositoryProvider).approveRecipe(recipe.id!);
-  }
-
-  void _handleReject(BuildContext context, WidgetRef ref) {
-    if (recipe.id == null) return;
-    // Example: ref.read(adminControllerProvider.notifier).rejectRecipe(recipe.id!);
-    ref.read(recipeRepositoryProvider).rejectRecipe(recipe.id!);
+    ref.read(pendingRecipesNotifierProvider.notifier).approveRecipe(recipe.id!);
   }
 }

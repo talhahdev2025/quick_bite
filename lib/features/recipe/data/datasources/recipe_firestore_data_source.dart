@@ -15,10 +15,10 @@ class RecipeFirestoreDataSource {
   }
 
   //reject recipe
-  Future<void> rejectRecipe(String recipeId) async {
+  Future<void> rejectRecipe(String recipeId,String rejectReason) async {
     await _firestore.collection('recipes').doc(recipeId).update({
       'status': 'rejected',
-      'rejectionReason': 'Please add clearer step by step instructions',
+      'rejectionReason': rejectReason,
     });
   }
 

@@ -41,7 +41,8 @@ class AppDatabase {
     rating REAL,
     reviewCount INTEGER,
     mealType TEXT,
-    status TEXT
+    status TEXT,
+    rejectionReason TEXT
   )
 ''');
   }

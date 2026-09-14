@@ -233,7 +233,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: AppRadius.large),
             content: Text(
-              '🎉 Recipe saved successfully to your collection!',
+              '🎉 Recipe submitted for admin review!',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

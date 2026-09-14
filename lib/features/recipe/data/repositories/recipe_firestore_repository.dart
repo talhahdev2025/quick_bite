@@ -13,8 +13,8 @@ class RecipeRepository {
     await _remoteDataSource.approveRecipe(recipeId);
   }
   //
-  Future<void> rejectRecipe(String recipeId)async{
-    await _remoteDataSource.rejectRecipe(recipeId);
+  Future<void> rejectRecipe(String recipeId,String rejectReason)async{
+    await _remoteDataSource.rejectRecipe(recipeId,rejectReason);
   }
   //save recipe
   Future<void> saveRecipe(RecipeModel recipeModel) {
