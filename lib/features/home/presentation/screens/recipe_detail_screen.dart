@@ -101,7 +101,7 @@ class RecipeDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Ingredients', style: AppTextStyles.headlineMedium),
+                          const Text('Ingredients', style: AppTextStyles.headlineMedium),
                           AppSpacing.vMd,
                           ...data.ingredients!.map((ingredient) {
                             return Padding(
@@ -138,7 +138,7 @@ class RecipeDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Instructions', style: AppTextStyles.headlineMedium),
+                          const Text('Instructions', style: AppTextStyles.headlineMedium),
                           AppSpacing.vMd,
                           ...data.instructions!.asMap().entries.map((entry) {
                             final index = entry.key;

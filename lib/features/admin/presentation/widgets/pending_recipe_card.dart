@@ -25,7 +25,7 @@ class PendingRecipeCard extends ConsumerWidget {
         border: Border.all(color: AppColors.divider),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.02),
+            color: AppColors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -86,7 +86,7 @@ class PendingRecipeCard extends ConsumerWidget {
                             horizontal: AppSizes.sm,
                             vertical: AppSizes.xs / 2,
                           ),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.background,
                             borderRadius: AppRadius.small,
                           ),

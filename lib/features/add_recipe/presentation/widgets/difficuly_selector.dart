@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 
 class DifficultySelector extends StatelessWidget {

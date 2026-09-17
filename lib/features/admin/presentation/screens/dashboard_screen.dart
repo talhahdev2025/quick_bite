@@ -100,7 +100,7 @@ class DashboardScreen extends ConsumerWidget {
           Container(
             padding: AppInsets.md,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha:0.1),
               borderRadius: AppRadius.medium,
             ),
             child: const Icon(
@@ -146,7 +146,7 @@ class DashboardScreen extends ConsumerWidget {
           Container(
             padding: AppInsets.lg,
             decoration: BoxDecoration(
-              color: AppColors.success.withOpacity(0.1),
+              color: AppColors.success.withValues(alpha:0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(

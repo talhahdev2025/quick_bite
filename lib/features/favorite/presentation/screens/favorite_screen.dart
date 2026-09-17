@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
-import 'package:quick_bite/core/constants/app_durations.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
@@ -93,7 +92,7 @@ class FavoriteScreen extends ConsumerWidget {
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.only(right: AppSizes.lg),
       decoration: BoxDecoration(
-        color: AppColors.error.withOpacity(0.15),
+        color: AppColors.error.withValues(alpha:0.15),
         borderRadius: AppRadius.large,
       ),
       child: const Icon(
@@ -136,15 +135,16 @@ class FavoriteScreen extends ConsumerWidget {
                     fit: BoxFit.cover,
                     frameBuilder:
                         (context, child, frame, wasSynchronouslyLoaded) {
-                          if (wasSynchronouslyLoaded || frame != null)
+                          if (wasSynchronouslyLoaded || frame != null) {
                             return child;
+                          }
                           return Container(
                             width: 64,
                             height: 64,
                             color: AppColors.background,
                           );
                         },
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (_, _, _) => Container(
                       width: 64,
                       height: 64,
                       color: AppColors.background,
@@ -238,7 +238,7 @@ class FavoriteScreen extends ConsumerWidget {
           Container(
             padding: AppInsets.lg,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha:0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(

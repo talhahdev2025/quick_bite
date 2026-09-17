@@ -9,12 +9,9 @@ import 'package:quick_bite/features/add_recipe/presentation/widgets/dashed_borde
 import 'package:quick_bite/features/add_recipe/presentation/widgets/difficuly_selector.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/recipe_text_field.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/section_header.dart';
-import 'package:quick_bite/features/favorite/presentation/providers/providers.dart';
 import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
-import 'package:quick_bite/features/home/presentation/provider/providers.dart';
 import 'package:quick_bite/features/recipe/data/repositories/recipe_firestore_repository.dart';
-import 'package:quick_bite/features/recipe/data/repositories/recipe_repository.dart';
 
 class AddRecipeScreen extends ConsumerStatefulWidget {
   const AddRecipeScreen({super.key});
@@ -217,12 +214,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         userId: ref.read(authProvider).user?.uid,
         mealType: _selectedMealType != null ? [_selectedMealType!] : ['Dinner'],
       );
-      //TODO: sent recipe for approval
-      // // Save to SQLite Favorites/Saved recipes
-      // await ref.read(recipeLocalDataSourceProvider).addFavorite(recipeModel);
-      // ref.invalidate(favoriteNotifierProvider);
-      // ref.invalidate(recipeProvider);
-
       await ref.read(recipeFirestoreRepositoryProvider).saveRecipe(recipeModel);
       //
       if (mounted) {

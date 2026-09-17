@@ -48,7 +48,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: CustomFilledButton(
-              title: 'Continue',
+              text: 'Continue',
               onPressed: () => tapped = true,
             ),
           ),
@@ -65,7 +65,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: CustomFilledButton(
-              title: 'Continue',
+              text: 'Continue',
               isLoading: true,
               onPressed: () {},
             ),

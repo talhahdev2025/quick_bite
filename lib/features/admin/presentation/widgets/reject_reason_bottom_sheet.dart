@@ -5,7 +5,7 @@ import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
 
 class RejectReasonBottomSheet extends StatefulWidget {
-  final Function(String reason) onConfirm;
+  final void Function(String reason) onConfirm;
 
   const RejectReasonBottomSheet({super.key, required this.onConfirm});
 
@@ -194,7 +194,7 @@ class _RejectReasonBottomSheetState extends State<RejectReasonBottomSheet> {
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: AppColors.error,
-                    disabledBackgroundColor: AppColors.error.withOpacity(0.4),
+                    disabledBackgroundColor: AppColors.error.withValues(alpha:0.4),
                     padding: AppInsets.button,
                     shape: const RoundedRectangleBorder(
                       borderRadius: AppRadius.medium,
