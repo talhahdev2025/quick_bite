@@ -16,11 +16,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _topCircleAnimation;
-  late Animation<Offset> _bottomCircleAnimation;
-  late Animation<double> _imageScaleAnimation;
-  late Animation<Offset> _buttonTranslateAnimation;
+  late final AnimationController _controller;
+  late final Animation<Offset> _topCircleAnimation;
+  late final Animation<Offset> _bottomCircleAnimation;
+  late final Animation<double> _imageScaleAnimation;
+  late final Animation<Offset> _buttonTranslateAnimation;
 
   @override
   void initState() {
@@ -30,25 +30,32 @@ class _SplashScreenState extends State<SplashScreen>
       duration: AppDurations.normal,
     );
 
+    final curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic, // Smoother curve than linear
+    );
+
+    // Using relative fractional offsets for SlideTransition
     _topCircleAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(-30, 30),
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+      end: const Offset(-0.1, 0.1),
+    ).animate(curvedAnimation);
 
     _bottomCircleAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(30, -30),
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+      end: const Offset(0.1, -0.1),
+    ).animate(curvedAnimation);
+
     _imageScaleAnimation = Tween<double>(
       begin: 0.7,
       end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
-    _buttonTranslateAnimation = Tween<Offset>(
-      begin: const Offset(0, 20),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+    ).animate(curvedAnimation);
 
-    //controller
+    _buttonTranslateAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(curvedAnimation);
+
     _controller.forward();
   }
 
@@ -58,106 +65,109 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  Future<void> _onGetStartedPressed() async {
+    final router = GoRouter.of(context);
+    await _controller.reverse();
+    if (!mounted) return;
+    router.go(AppRoutes.loginPath);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) => Stack(
-            children: [
-              //top container
-              Positioned(
-                top: -100,
-                right: -200,
-                child: Transform.translate(
-                  offset: _topCircleAnimation.value,
-                  child: Container(
-                    width: 300,
-                    height: 300,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.darkPrimary,
-                    ),
+      body: Stack(
+        children: [
+          // Top Decorative Circle
+          Positioned(
+            top: -100,
+            right: -100,
+            child: SlideTransition(
+              position: _topCircleAnimation,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.darkPrimary,
+                ),
+              ),
+            ),
+          ),
+
+          // Bottom Decorative Circle
+          Positioned(
+            bottom: -100,
+            left: -150,
+            child: SlideTransition(
+              position: _bottomCircleAnimation,
+              child: Container(
+                width: 400,
+                height: 400,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.darkPrimary, AppColors.primary],
+                    stops: [0.5, 1.0],
                   ),
                 ),
               ),
-              //bottom container
-              Positioned(
-                bottom: 100,
-                left: -300,
-                child: Transform.translate(
-                  offset: _bottomCircleAnimation.value,
-                  child: Container(
-                    width: 400,
-                    height: 400,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomRight,
-                        colors: [AppColors.darkPrimary, AppColors.primary],
-                        stops: [0.5, 1],
-                      ),
+            ),
+          ),
+
+          // Main Content Area
+          SafeArea(
+            child: Padding(
+              padding: AppInsets.hXxxl,
+              child: Column(
+                children: [
+                  const Spacer(),
+
+                  // Splash Image
+                  ScaleTransition(
+                    scale: _imageScaleAnimation,
+                    child: Image.asset(
+                      'assets/splash_img.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
-                ),
-              ),
-              //
-              Positioned(
-                bottom: 50,
-                right: 0,
-                left: 0,
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 450,
-                  child: Column(
-                    children: [
-                      ScaleTransition(
-                        scale: _imageScaleAnimation,
-                        child: Image.asset('assets/splash_img.png'),
-                      ),
-                      const Spacer(),
-                      Transform.translate(
-                        offset: _buttonTranslateAnimation.value,
-                        child: Container(
-                          margin: AppInsets.hXxxl,
-                          width: double.infinity,
-                          child: FilledButton(
-                            onPressed: () async {
-                              final router = GoRouter.of(context);
-                              await _controller.reverse();
-                              if (!mounted) return;
-                              router.go(AppRoutes.loginPath);
-                            },
-                            style: FilledButton.styleFrom(
-                              backgroundColor: AppColors.white,
-                              foregroundColor: AppColors.primary,
-                              padding: AppInsets.button,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: AppRadius.large,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: AppInsets.button,
-                              child: Text(
-                                'Get Started',
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ),
+
+                  const Spacer(),
+
+                  // Action Button
+                  SlideTransition(
+                    position: _buttonTranslateAnimation,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: _onGetStartedPressed,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.white,
+                          foregroundColor: AppColors.primary,
+                          padding: AppInsets.button,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.large,
+                          ),
+                        ),
+                        child: Text(
+                          'Get Started',
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+
+                  const SizedBox(height: 24),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
