@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
@@ -10,11 +11,14 @@ import 'package:quick_bite/features/add_recipe/presentation/widgets/difficuly_se
 import 'package:quick_bite/features/add_recipe/presentation/widgets/recipe_text_field.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/section_header.dart';
 import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
-import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
-import 'package:quick_bite/features/recipe/data/repositories/recipe_firestore_repository.dart';
+import 'package:quick_bite/features/recipe/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/presentation/providers/recipe_providers.dart';
 
 class AddRecipeScreen extends ConsumerStatefulWidget {
-  const AddRecipeScreen({super.key});
+  const AddRecipeScreen({super.key, this.recipe});
+  final Recipe? recipe;
+
+  bool get isEditMode => recipe != null;
 
   @override
   ConsumerState<AddRecipeScreen> createState() => _AddRecipeScreenState();
@@ -25,7 +29,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
   // Controllers
   final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  // final _descriptionController = TextEditingController();
   final _servingsController = TextEditingController();
   final _prepTimeController = TextEditingController();
   final _cookTimeController = TextEditingController();
@@ -76,9 +80,48 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    final recipe = widget.recipe;
+
+    if (recipe != null) {
+      _nameController.text = recipe.name ?? '';
+      _servingsController.text = recipe.servings?.toString() ?? '';
+      _prepTimeController.text = recipe.prepTimeMinutes?.toString() ?? '';
+      _cookTimeController.text = recipe.cookTimeMinutes?.toString() ?? '';
+      _selectedDifficulty = recipe.difficulty;
+      _selectedCuisine = _cuisines.contains(recipe.cuisine)
+          ? recipe.cuisine
+          : null;
+      _selectedMealType = recipe.mealType?.first;
+
+      // recipe tags
+      if (recipe.tags != null && recipe.tags!.isNotEmpty) {
+        _selectedTags.addAll(recipe.tags!);
+      }
+
+      //recipe ingredients
+      if (recipe.ingredients != null && recipe.ingredients!.isNotEmpty) {
+        _ingredientControllers.clear();
+        for (final ingredient in recipe.ingredients!) {
+          _ingredientControllers.add(TextEditingController(text: ingredient));
+        }
+      }
+
+      //recipe instructions
+      if (recipe.instructions != null && recipe.instructions!.isNotEmpty) {
+        _instructionControllers.clear();
+        for (final instruction in recipe.instructions!) {
+          _instructionControllers.add(TextEditingController(text: instruction));
+        }
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
-    _descriptionController.dispose();
+    // _descriptionController.dispose();
     _servingsController.dispose();
     _prepTimeController.dispose();
     _cookTimeController.dispose();
@@ -103,10 +146,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   void _removeIngredient(int index) {
     if (_ingredientControllers.length == 1) return;
 
-    _ingredientControllers[index].dispose();
-    setState(() {
-      _ingredientControllers.removeAt(index);
-    });
+    final controller = _ingredientControllers.removeAt(index);
+    setState(() {});
+    controller.dispose();
   }
 
   void _addInstruction() {
@@ -118,10 +160,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   void _removeInstruction(int index) {
     if (_instructionControllers.length == 1) return;
 
-    _instructionControllers[index].dispose();
-    setState(() {
-      _instructionControllers.removeAt(index);
-    });
+    final controller = _instructionControllers.removeAt(index);
+    setState(() {});
+    controller.dispose();
   }
 
   void _toggleTag(String tag) {
@@ -136,7 +177,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
   void _resetForm() {
     _nameController.clear();
-    _descriptionController.clear();
+    // _descriptionController.clear();
     _servingsController.clear();
     _prepTimeController.clear();
     _cookTimeController.clear();
@@ -160,14 +201,25 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     });
   }
 
+
+
   Future<void> _saveRecipe() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
+    final userId = ref.read(authProvider).user?.uid;
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('User session expired. Please log in again.'),
+        ),
+      );
+      return;
+    }
+
     final ingredients = _ingredientControllers
         .map((c) => c.text.trim())
-        .where((v) => v.isNotEmpty)
         .toList();
 
     if (ingredients.isEmpty) {
@@ -179,7 +231,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
     final instructions = _instructionControllers
         .map((c) => c.text.trim())
-        .where((v) => v.isNotEmpty)
         .toList();
 
     if (instructions.isEmpty) {
@@ -191,12 +242,13 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       return;
     }
 
+    final messenger = ScaffoldMessenger.of(context);
+
     setState(() => _isSaving = true);
 
     try {
-      final recipeModel = RecipeModel(
-        // id: (DateTime.now().millisecondsSinceEpoch % 1000000).toString(),
-        id: null,
+      final recipe = Recipe(
+        id: widget.isEditMode ? widget.recipe?.id : null,
         name: _nameController.text.trim(),
         ingredients: ingredients,
         instructions: instructions,
@@ -206,21 +258,36 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         difficulty: _selectedDifficulty ?? 'Easy',
         cuisine: _selectedCuisine ?? 'Other',
         tags: _selectedTags.isNotEmpty ? _selectedTags : ['Homemade'],
-        image: 'https://cdn.dummyjson.com/recipe-images/1.webp',
-        rating: 5.0,
-        reviewCount: 1,
+        image:
+            widget.recipe?.image ??
+            'https://cdn.dummyjson.com/recipe-images/1.webp',
+        rating: widget.recipe?.rating ?? 0.0,
+        reviewCount: widget.recipe?.reviewCount ?? 0,
         status: 'pending',
         rejectionReason: null,
-        userId: ref.read(authProvider).user?.uid,
+        userId: userId,
         mealType: _selectedMealType != null ? [_selectedMealType!] : ['Dinner'],
       );
-      await ref.read(recipeFirestoreRepositoryProvider).saveRecipe(recipeModel);
-      //
-      if (mounted) {
+
+      if(widget.isEditMode){
+        //TODO: dont use null aware assertion operator here
+        await ref.read(recipeFirestoreRepositoryProvider).updateRecipe(recipe.id!,recipe );
+      }else{
+        await ref.read(recipeFirestoreRepositoryProvider).saveRecipe(recipe);
+      }
+
+      if (!mounted) return;
+
+      if (widget.isEditMode) {
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Recipe updated successfully!')),
+        );
+        context.pop();
+      } else {
         _resetForm();
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           const SnackBar(
-            backgroundColor: AppColors.primary,
+            backgroundColor: AppColors.secondary,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: AppRadius.large),
             content: Text(
@@ -234,16 +301,17 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         );
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: AppColors.error,
-            content: Text('Failed to save recipe: $e'),
-          ),
-        );
-      }
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.error,
+          content: Text('Failed to save recipe: $e'),
+        ),
+      );
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
@@ -268,7 +336,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                         AppSpacing.vLg,
                         _buildRecipeName(),
                         AppSpacing.vLg,
-                        _buildDescription(),
+                        // _buildDescription(),
                         AppSpacing.vLg,
                         _buildDifficulty(),
                         AppSpacing.vLg,
@@ -306,14 +374,20 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       automaticallyImplyLeading: false,
       backgroundColor: AppColors.surface,
       elevation: 0,
-      title: const Text(
-        'Create Recipe',
-        style: TextStyle(
+      title: Text(
+        widget.isEditMode ? 'Edit Recipe' : 'Create Recipe',
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,
         ),
       ),
+      leading: widget.isEditMode
+          ? IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.arrow_back),
+            )
+          : null,
       actions: [
         TextButton(
           onPressed: _resetForm,
@@ -380,20 +454,20 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     );
   }
 
-  Widget _buildDescription() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader.name(header: 'Description'),
-        AppSpacing.vSm,
-        RecipeTextField(
-          controller: _descriptionController,
-          hintText: 'Tell a little about your recipe...',
-          maxLines: 3,
-        ),
-      ],
-    );
-  }
+  // Widget _buildDescription() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const SectionHeader.name(header: 'Description'),
+  //       AppSpacing.vSm,
+  //       RecipeTextField(
+  //         controller: _descriptionController,
+  //         hintText: 'Tell a little about your recipe...',
+  //         maxLines: 3,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildDifficulty() {
     return Column(
@@ -542,6 +616,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         AppSpacing.vSm,
         ...List.generate(_ingredientControllers.length, (index) {
           return Padding(
+            key: ValueKey(_ingredientControllers[index]),
             padding: const EdgeInsets.only(bottom: 10),
             child: RecipeTextField(
               controller: _ingredientControllers[index],
@@ -570,6 +645,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         AppSpacing.vSm,
         ...List.generate(_instructionControllers.length, (index) {
           return Padding(
+            key: ValueKey(_instructionControllers[index]),
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -656,7 +732,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       width: double.infinity,
       height: 54,
       child: ElevatedButton(
-        onPressed: _isSaving ? null : _saveRecipe,
+        onPressed: _isSaving ? null :_saveRecipe,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -675,7 +751,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                 ),
               )
             : Text(
-                'Save Recipe',
+                widget.isEditMode ? 'Resubmit Recipe' : 'Save Recipe',
                 style: AppTextStyles.titleMedium.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

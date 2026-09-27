@@ -4,6 +4,8 @@ import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_sizes.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:quick_bite/features/admin/presentation/providers/providers.dart';
 import 'package:quick_bite/features/admin/presentation/widgets/pending_recipe_card.dart';
 
@@ -21,6 +23,10 @@ class DashboardScreen extends ConsumerWidget {
         elevation: 0,
         scrolledUnderElevation: 0.5,
         centerTitle: false,
+        leading: IconButton(
+          onPressed: () => context.pop(),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
         title: const Text(
           'Admin Dashboard',
           style: TextStyle(
@@ -75,9 +81,7 @@ class DashboardScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.primary,
-          ),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (error, stackTrace) => _buildErrorState(ref),
       ),
@@ -91,16 +95,14 @@ class DashboardScreen extends ConsumerWidget {
       decoration: const BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadius.large,
-        border: Border.fromBorderSide(
-          BorderSide(color: AppColors.divider),
-        ),
+        border: Border.fromBorderSide(BorderSide(color: AppColors.divider)),
       ),
       child: Row(
         children: [
           Container(
             padding: AppInsets.md,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha:0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: AppRadius.medium,
             ),
             child: const Icon(
@@ -146,7 +148,7 @@ class DashboardScreen extends ConsumerWidget {
           Container(
             padding: AppInsets.lg,
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha:0.1),
+              color: AppColors.success.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(

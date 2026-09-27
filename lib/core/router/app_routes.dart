@@ -7,6 +7,8 @@ class AppRoutes {
   static const recipeDetailPath = '/recipeDetail';
   static const addRecipePath = '/addRecipe';
   static const adminDashboardPath = '/adminDashboard';
+  static const profilePath = '/profile';
+  static const mySubmissionsPath = '/mySubmissions';
 
   // route names
   static const splash = 'splash';
@@ -16,5 +18,8 @@ class AppRoutes {
   static const recipeDetail = 'recipeDetail';
   static const addRecipe = 'addRecipe';
   static const adminDashboard = 'adminDashboard';
+  static const profile = 'profile';
+  static const mySubmissions = 'mySubmissions';
+
 
 }

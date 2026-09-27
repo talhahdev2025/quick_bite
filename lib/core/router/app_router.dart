@@ -5,6 +5,8 @@ import 'package:quick_bite/core/router/router_notifer.dart';
 import 'package:quick_bite/features/add_recipe/presentation/screens/add_recipe_screen.dart';
 import 'package:quick_bite/features/admin/presentation/screens/dashboard_screen.dart';
 import 'package:quick_bite/features/favorite/presentation/screens/favorite_screen.dart';
+import 'package:quick_bite/features/profile/presentation/screens/my_submissions_screen.dart';
+import 'package:quick_bite/features/profile/presentation/screens/profile_screen.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 import 'package:quick_bite/features/home/presentation/screens/home_screen.dart';
 import 'package:quick_bite/features/home/presentation/screens/recipe_detail_screen.dart';
@@ -36,10 +38,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          final authState = ref.read(authProvider);
+          // final authState = ref.read(authProvider);
           return MainNavigation(
             navigationShell: navigationShell,
-            isAdmin: authState.user?.role == 'admin',
+            // isAdmin: authState.user?.role == 'admin',
           );
         },
         branches: [
@@ -69,7 +71,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.addRecipePath,
                 name: AppRoutes.addRecipe,
-                builder: (context, state) => const AddRecipeScreen(),
+                builder: (context, state) {
+                  final recipe = state.extra as Recipe?;
+                  return AddRecipeScreen(recipe: recipe,);
+                },
               ),
             ],
           ),
@@ -83,13 +88,27 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          //admin dashboard
+
+          //profile screen branch
           StatefulShellBranch(
             routes: [
+              GoRoute(
+                path: AppRoutes.profilePath,
+                name: AppRoutes.profile,
+                builder: (context, state) => const ProfileScreen(),
+              ),
+
+              //admin dashboard
               GoRoute(
                 path: AppRoutes.adminDashboardPath,
                 name: AppRoutes.adminDashboard,
                 builder: (context, state) => const DashboardScreen(),
+              ),
+              // my submissions screen
+              GoRoute(
+                path: AppRoutes.mySubmissionsPath,
+                name: AppRoutes.mySubmissions,
+                builder: (context, state) => const MySubmissionsScreen(),
               ),
             ],
           ),

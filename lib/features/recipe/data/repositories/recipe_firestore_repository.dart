@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/features/recipe/data/datasources/recipe_firestore_data_source.dart';
 import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
@@ -7,19 +6,21 @@ class RecipeRepository {
   final RecipeFirestoreDataSource _remoteDataSource;
 
   RecipeRepository({required this._remoteDataSource});
-  
+
   //approve recipe
-  Future<void> approveRecipe(String recipeId)async{
+  Future<void> approveRecipe(String recipeId) async {
     await _remoteDataSource.approveRecipe(recipeId);
   }
+
   //
-  Future<void> rejectRecipe(String recipeId,String rejectReason)async{
-    await _remoteDataSource.rejectRecipe(recipeId,rejectReason);
+  Future<void> rejectRecipe(String recipeId, String rejectReason) async {
+    await _remoteDataSource.rejectRecipe(recipeId, rejectReason);
   }
+
   //save recipe
-  Future<void> saveRecipe(RecipeModel recipeModel) {
-    final recipe = recipeModel.toMap();
-    return _remoteDataSource.addRecipe(recipe);
+  Future<void> saveRecipe(Recipe recipe) {
+    final model = RecipeModel.fromEntity(recipe);
+    return _remoteDataSource.addRecipe(model.toMap());
   }
 
   //get approved recipes
@@ -35,16 +36,18 @@ class RecipeRepository {
       (models) => models.map((model) => model.toEntity()).toList(),
     );
   }
-}
 
-final recipeFirestoreDataSourceProvider = Provider<RecipeFirestoreDataSource>(
-  (ref) => RecipeFirestoreDataSource(),
-);
-final recipeFirestoreRepositoryProvider = Provider<RecipeRepository>((ref) {
-  final remoteDataSource = ref.watch(recipeFirestoreDataSourceProvider);
-  return RecipeRepository(remoteDataSource: remoteDataSource);
-});
-final approvedRecipesStreamProvider = StreamProvider<List<Recipe>>((ref) {
-  final repository = ref.watch(recipeFirestoreRepositoryProvider);
-  return repository.getApprovedRecipes();
-});
+  //get user recipes
+  Stream<List<Recipe>> getUserRecipe(String userId) {
+    return _remoteDataSource
+        .getUserRecipes(userId)
+        .map((models) => models.map((model) => model.toEntity()).toList());
+  }
+
+  //update recipe
+
+  Future<void> updateRecipe(String id, Recipe recipe)  {
+    final data = RecipeModel.fromEntity(recipe);
+    return _remoteDataSource.updateRecipe(id, data.toMap());
+  }
+}

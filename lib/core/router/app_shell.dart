@@ -5,10 +5,8 @@ class MainNavigation extends StatelessWidget {
   const MainNavigation({
     super.key,
     required this.navigationShell,
-    required this.isAdmin,
   });
   final StatefulNavigationShell navigationShell;
-  final bool isAdmin;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +32,10 @@ class MainNavigation extends StatelessWidget {
             icon: Icon(Icons.favorite_outline),
             label: 'Favorite',
           ),
-          if (isAdmin)
             const NavigationDestination(
-              selectedIcon: Icon(Icons.admin_panel_settings),
-              icon: Icon(Icons.admin_panel_settings_outlined),
-              label: 'Dashboard',
+              selectedIcon: Icon(Icons.person_rounded),
+              icon: Icon(Icons.person_outline_rounded),
+              label: 'Profile',
             ),
         ],
       ),

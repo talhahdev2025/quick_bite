@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quick_bite/features/home/presentation/provider/providers.dart';
+import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 
 class RecipeFirestoreDataSource {
@@ -15,7 +17,7 @@ class RecipeFirestoreDataSource {
   }
 
   //reject recipe
-  Future<void> rejectRecipe(String recipeId,String rejectReason) async {
+  Future<void> rejectRecipe(String recipeId, String rejectReason) async {
     await _firestore.collection('recipes').doc(recipeId).update({
       'status': 'rejected',
       'rejectionReason': rejectReason,
@@ -53,5 +55,26 @@ class RecipeFirestoreDataSource {
             return RecipeModel.fromMap({...data, 'id': doc.id});
           }).toList();
         });
+  }
+
+  Stream<List<RecipeModel>> getUserRecipes(String userId) {
+    return _firestore
+        .collection('recipes')
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            return RecipeModel.fromMap({...data, 'id': doc.id});
+          }).toList();
+        });
+  }
+
+  Future<void> updateRecipe(String id, Map<String, dynamic> data) async {
+    await _firestore.collection('recipes').doc(id).update({
+      ...data,
+      'status': 'pending',
+      'rejectionReason': FieldValue.delete(),
+    });
   }
 }
