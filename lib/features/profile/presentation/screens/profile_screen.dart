@@ -65,7 +65,7 @@ class ProfileScreen extends ConsumerWidget {
                   iconColor: AppColors.primary,
                   title: 'Pending Approvals',
                   subtitle: 'Review student recipe submissions',
-                  badgeCount: 10,
+                  // badgeCount: 10,
                   onTap: () {
                     HapticFeedback.vibrate();
                     context.pushNamed(AppRoutes.adminDashboard);
@@ -97,16 +97,16 @@ class ProfileScreen extends ConsumerWidget {
                     },
                   );
                 }
-                return ProfileTile(
-                  icon: Icons.favorite_border_rounded,
-                  iconColor: AppColors.primary,
-                  title: 'Saved Favorites',
-                  subtitle: 'Quick access to your bookmarked recipes',
-                  onTap: () {
-                    HapticFeedback.vibrate();
-                    context.pushNamed(AppRoutes.favorite);
-                  },
-                );
+                // return ProfileTile(
+                //   icon: Icons.favorite_border_rounded,
+                //   iconColor: AppColors.primary,
+                //   title: 'Saved Favorites',
+                //   subtitle: 'Quick access to your bookmarked recipes',
+                //   onTap: () {
+                //     HapticFeedback.vibrate();
+                //     context.pushNamed(AppRoutes.favorite);
+                //   },
+                // );
               },
             ),
           ),

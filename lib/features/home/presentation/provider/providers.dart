@@ -66,17 +66,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_bite/features/recipe/data/datasources/recipe_firestore_data_source.dart';
 import 'package:quick_bite/features/recipe/data/repositories/recipe_firestore_repository.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/presentation/providers/recipe_providers.dart';
 
 // Data Source & Repository Providers
-final recipeFirestoreDataSourceProvider = Provider<RecipeFirestoreDataSource>(
-  (ref) => RecipeFirestoreDataSource(),
-);
-
-final recipeRepositoryProvider = Provider<RecipeRepository>(
-  (ref) => RecipeRepository(
-    remoteDataSource: ref.watch(recipeFirestoreDataSourceProvider),
-  ),
-);
 
 // StreamProvider that emits live Firestore recipes
 final recipeStreamProvider = StreamProvider<List<Recipe>>(

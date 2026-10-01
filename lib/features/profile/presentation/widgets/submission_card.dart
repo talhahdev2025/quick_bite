@@ -8,7 +8,8 @@ class SubmissionCard extends StatelessWidget {
   final Recipe submission;
   final VoidCallback onEditPressed;
 
-  const SubmissionCard({super.key, 
+  const SubmissionCard({
+    super.key,
     required this.submission,
     required this.onEditPressed,
   });
@@ -49,14 +50,14 @@ class SubmissionCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                submission.status.toUpperCase(),
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1.1,
-                ),
-              ),
+              // Text(
+              //   submission.status.toUpperCase(),
+              //   style: AppTextStyles.bodySmall.copyWith(
+              //     color: AppColors.textSecondary,
+              //     fontWeight: FontWeight.w600,
+              //     letterSpacing: 1.1,
+              //   ),
+              // ),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -104,20 +105,21 @@ class SubmissionCard extends StatelessWidget {
                   color: AppColors.textSecondary,
                 ),
               ),
-              const SizedBox(width: 16),
-              const Icon(
-                Icons.calendar_today_rounded,
-                size: 14,
-                color: AppColors.textSecondary,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                ' submission data missing...',
-                // submission.submittedDate,
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
+              // const SizedBox(width: 16),
+              // const Icon(
+              //   Icons.calendar_today_rounded,
+              //   size: 14,
+              //   color: AppColors.textSecondary,
+              // ),
+
+              // const SizedBox(width: 4),
+              // Text(
+              //   // ' submission data missing...',
+              //   submission.,
+              //   style: AppTextStyles.bodySmall.copyWith(
+              //     color: AppColors.textSecondary,
+              //   ),
+              // ),
             ],
           ),
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quick_bite/features/home/presentation/provider/providers.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
+import 'package:quick_bite/features/recipe/presentation/providers/recipe_providers.dart';
 
 // 1. Declare StreamNotifierProvider instead of StreamProvider
 final pendingRecipesNotifierProvider =

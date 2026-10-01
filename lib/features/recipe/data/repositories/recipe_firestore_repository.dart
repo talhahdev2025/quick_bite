@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:quick_bite/features/recipe/data/datasources/recipe_firestore_data_source.dart';
+import 'package:quick_bite/features/recipe/data/datasources/recipe_storage_data_source.dart';
 import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class RecipeRepository {
   final RecipeFirestoreDataSource _remoteDataSource;
+  final RecipeStorageDataSource _storageDataSource;
 
-  RecipeRepository({required this._remoteDataSource});
+  RecipeRepository({
+    required this._remoteDataSource,
+    required this._storageDataSource,
+  });
 
   //approve recipe
   Future<void> approveRecipe(String recipeId) async {
@@ -46,8 +53,16 @@ class RecipeRepository {
 
   //update recipe
 
-  Future<void> updateRecipe(String id, Recipe recipe)  {
+  Future<void> updateRecipe(String id, Recipe recipe) {
     final data = RecipeModel.fromEntity(recipe);
     return _remoteDataSource.updateRecipe(id, data.toMap());
+  }
+
+  // upload recipe image
+  Future<String> uploadRecipeImage({
+    required File imageFile,
+    required String userId,
+  }) async {
+    return await _storageDataSource.uploadRecipeImage(imageFile, userId);
   }
 }
