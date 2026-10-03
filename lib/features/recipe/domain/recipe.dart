@@ -20,6 +20,7 @@ class Recipe {
   final List<String>? mealType;
   final String status; // 'pending', 'approved', or 'rejected'
   final String? rejectionReason;
+  final String? createdBy;
 
   const Recipe({
     this.id,
@@ -40,6 +41,7 @@ class Recipe {
     this.mealType,
     this.status = 'pending',
     this.rejectionReason,
+    this.createdBy,
   });
 
   Recipe copyWith({
@@ -61,6 +63,7 @@ class Recipe {
     List<String>? mealType,
     String? status,
     String? rejectionReason,
+    String? createdBy,
   }) {
     return Recipe(
       id: id ?? this.id,
@@ -81,6 +84,7 @@ class Recipe {
       mealType: mealType ?? this.mealType,
       status: status ?? this.status,
       rejectionReason: rejectionReason ?? this.rejectionReason,
+      createdBy: createdBy ?? this.createdBy,
     );
   }
 
@@ -106,7 +110,8 @@ class Recipe {
         other.reviewCount == reviewCount &&
         listEquals(other.mealType, mealType) &&
         other.status == status &&
-        other.rejectionReason == rejectionReason;
+        other.rejectionReason == rejectionReason &&
+        other.createdBy == createdBy;
   }
 
   @override

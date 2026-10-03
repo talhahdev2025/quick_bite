@@ -101,7 +101,10 @@ class RecipeDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Ingredients', style: AppTextStyles.headlineMedium),
+                          const Text(
+                            'Ingredients',
+                            style: AppTextStyles.headlineMedium,
+                          ),
                           AppSpacing.vMd,
                           ...data.ingredients!.map((ingredient) {
                             return Padding(
@@ -138,7 +141,10 @@ class RecipeDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Instructions', style: AppTextStyles.headlineMedium),
+                          const Text(
+                            'Instructions',
+                            style: AppTextStyles.headlineMedium,
+                          ),
                           AppSpacing.vMd,
                           ...data.instructions!.asMap().entries.map((entry) {
                             final index = entry.key;
@@ -186,18 +192,18 @@ class RecipeDetailScreen extends StatelessWidget {
                         spacing: 8,
                         runSpacing: 8,
                         children: data.tags!
-                            .map((tag) => Chip(
-                                  label: Text(tag),
-                                  backgroundColor: AppColors.background,
-                                  side: BorderSide.none,
-                                ))
+                            .map(
+                              (tag) => Chip(
+                                label: Text(tag),
+                                backgroundColor: AppColors.background,
+                                side: BorderSide.none,
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
                   ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 32),
-                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
               ],
             ),
           ),
@@ -206,6 +212,5 @@ class RecipeDetailScreen extends StatelessWidget {
     );
   }
 }
-
 
 //info item

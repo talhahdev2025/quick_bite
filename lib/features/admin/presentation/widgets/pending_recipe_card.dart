@@ -71,7 +71,7 @@ class PendingRecipeCard extends ConsumerWidget {
                       const SizedBox(height: AppSizes.xs),
                       if (recipe.userId != null)
                         Text(
-                          'Submitted by: ${recipe.userId}',
+                          'Submitted by: ${recipe.createdBy}',
                           style: const TextStyle(
                             fontSize: AppSizes.md - 1,
                             color: AppColors.textSecondary,

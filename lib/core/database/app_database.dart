@@ -42,7 +42,8 @@ class AppDatabase {
     reviewCount INTEGER,
     mealType TEXT,
     status TEXT,
-    rejectionReason TEXT
+    rejectionReason TEXT,
+    createdBy TEXT
   )
 ''');
   }

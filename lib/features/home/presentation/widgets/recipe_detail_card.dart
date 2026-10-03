@@ -5,6 +5,7 @@ import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_shadows.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
+import 'package:quick_bite/features/home/presentation/widgets/image_preview_dialog.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class RecipeDetailCard extends StatelessWidget {
@@ -87,28 +88,35 @@ class RecipeDetailCard extends StatelessWidget {
               right: 0,
               top: top ?? 60,
               child: Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.background,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.15),
-                        blurRadius: 16,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Hero(
-                      tag: 'recipe_image_${data.id}',
-                      child: Image.network(
-                        data.image ?? '',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.fastfood, size: 64, color: AppColors.primary),
+                child: GestureDetector(
+                  onTap: () => _openFullImage(context, data.image),
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.background,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 16,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Hero(
+                        tag: 'recipe_image_${data.id}',
+                        child: Image.network(
+                          data.image ?? '',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.fastfood,
+                                size: 64,
+                                color: AppColors.primary,
+                              ),
+                        ),
                       ),
                     ),
                   ),
@@ -120,5 +128,19 @@ class RecipeDetailCard extends StatelessWidget {
       ),
     );
   }
-}
 
+  void _openFullImage(BuildContext context, String? imageUrl) {
+    if (imageUrl == null || imageUrl.isEmpty) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      useRootNavigator: false,
+      barrierColor: Colors.black87,
+      builder: (context) => ImagePreviewDialog(
+        imageUrl: imageUrl,
+        heroTag: 'recipe_image_${data.id}',
+      ),
+    );
+  }
+}

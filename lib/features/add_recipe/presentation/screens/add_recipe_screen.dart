@@ -261,9 +261,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       );
       return;
     }
-
-    final userId = ref.read(authProvider).user?.uid;
-    if (userId == null) {
+    final user=ref.read(authProvider).user;
+    final userId = user?.uid;
+    if (user==null||userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('User session expired. Please log in again.'),
@@ -324,6 +324,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         status: 'pending',
         rejectionReason: null,
         userId: userId,
+        createdBy: user.name,
         mealType: _selectedMealType != null ? [_selectedMealType!] : ['Dinner'],
       );
 

@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:quick_bite/features/recipe/domain/recipe.dart';
 
 class RecipeModel {
-  final String? id; // Changed from int? to String? for Firestore/UUID compatibility
+  final String?
+  id; // Changed from int? to String? for Firestore/UUID compatibility
   final String? name;
   final List<String>? ingredients;
   final List<String>? instructions;
@@ -16,13 +17,15 @@ class RecipeModel {
   final String? cuisine;
   final int? caloriesPerServing;
   final List<String>? tags;
-  final String? userId; // Changed from int? to String? for Firebase UID compatibility
+  final String?
+  userId; // Changed from int? to String? for Firebase UID compatibility
   final String? image;
   final double? rating;
   final int? reviewCount;
   final List<String>? mealType;
   final String status;
   final String? rejectionReason;
+  final String? createdBy;
 
   const RecipeModel({
     this.id,
@@ -43,6 +46,7 @@ class RecipeModel {
     this.mealType,
     this.status = 'pending',
     this.rejectionReason,
+    this.createdBy
   });
 
   RecipeModel copyWith({
@@ -64,6 +68,8 @@ class RecipeModel {
     List<String>? mealType,
     String? status,
     String? rejectionReason,
+    String? createdBy,
+    
   }) {
     return RecipeModel(
       id: id ?? this.id,
@@ -84,6 +90,7 @@ class RecipeModel {
       mealType: mealType ?? this.mealType,
       status: status ?? this.status,
       rejectionReason: rejectionReason ?? this.rejectionReason,
+      createdBy: createdBy??this.createdBy
     );
   }
 
@@ -107,6 +114,7 @@ class RecipeModel {
       mealType: recipe.mealType,
       status: recipe.status,
       rejectionReason: recipe.rejectionReason,
+      createdBy: recipe.createdBy
     );
   }
 
@@ -130,6 +138,7 @@ class RecipeModel {
       mealType: mealType,
       status: status,
       rejectionReason: rejectionReason,
+      createdBy: createdBy
     );
   }
 
@@ -153,6 +162,7 @@ class RecipeModel {
       'mealType': mealType != null ? jsonEncode(mealType) : null,
       'status': status,
       'rejectionReason': rejectionReason,
+      'createdBy': createdBy
     };
   }
 
@@ -188,6 +198,7 @@ class RecipeModel {
       mealType: parseList(map['mealType']),
       status: map['status'] as String? ?? 'pending',
       rejectionReason: map['rejectionReason'] as String?,
+      createdBy: map['createdBy'] as String?
     );
   }
 
@@ -211,6 +222,7 @@ class RecipeModel {
       'mealType': mealType,
       'status': status,
       'rejectionReason': rejectionReason,
+      'createdBy':createdBy
     };
   }
 
@@ -248,19 +260,21 @@ class RecipeModel {
       mealType: parseStringList(map['mealType']),
       status: map['status'] as String? ?? 'pending',
       rejectionReason: map['rejectionReason'] as String?,
+      createdBy: map['createdBy'] as String?
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory RecipeModel.fromJson(Map<String, dynamic> map) => RecipeModel.fromMap(map);
+  factory RecipeModel.fromJson(Map<String, dynamic> map) =>
+      RecipeModel.fromMap(map);
 
   factory RecipeModel.fromJsonString(String source) =>
       RecipeModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'RecipeModel(id: $id, name: $name, ingredients: $ingredients, instructions: $instructions, prepTimeMinutes: $prepTimeMinutes, cookTimeMinutes: $cookTimeMinutes, servings: $servings, difficulty: $difficulty, cuisine: $cuisine, caloriesPerServing: $caloriesPerServing, tags: $tags, userId: $userId, image: $image, rating: $rating, reviewCount: $reviewCount, mealType: $mealType, status: $status, rejectionReason: $rejectionReason)';
+    return 'RecipeModel(id: $id, name: $name, ingredients: $ingredients, instructions: $instructions, prepTimeMinutes: $prepTimeMinutes, cookTimeMinutes: $cookTimeMinutes, servings: $servings, difficulty: $difficulty, cuisine: $cuisine, caloriesPerServing: $caloriesPerServing, tags: $tags, userId: $userId, image: $image, rating: $rating, reviewCount: $reviewCount, mealType: $mealType, status: $status, rejectionReason: $rejectionReason, createdBy: $createdBy)';
   }
 
   @override
