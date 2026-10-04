@@ -13,26 +13,44 @@ import 'package:quick_bite/features/home/presentation/screens/recipe_detail_scre
 import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 import 'package:quick_bite/features/login/presentation/screens/login_screen.dart';
 import 'package:quick_bite/core/router/app_shell.dart';
-import 'package:quick_bite/features/splash/screens/splash_screen.dart';
+import 'package:quick_bite/features/splash/presentation/providers/provider.dart';
+import 'package:quick_bite/features/splash/presentation/screens/splash_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.watch(routerNotifierProvider.notifier);
+  final onboardingAsync = ref.watch(onboardingCompletedProvider);
   // final authState = ref.read(authProvider);
   // final bool isAdmin=authState.user?.role=='admin';
   return GoRouter(
     initialLocation: AppRoutes.splashPath,
     refreshListenable: notifier,
     redirect: (context, state) {
+      //wait until onboarding statis is loaded
+      if (onboardingAsync.isLoading) return null;
+      final hasCompletedOnboarding = onboardingAsync.value ?? false;
+      // obtain current auth state
       final authState = ref.read(authProvider);
       final isLoggedIn = authState.isLoggedIn;
-
-      final isSplash = state.matchedLocation == AppRoutes.splashPath;
-      final isLogginIn = state.matchedLocation == AppRoutes.loginPath;
-
-      if (isSplash) return null;
-      if (!isLoggedIn && !isLogginIn) return AppRoutes.loginPath;
-      if (isLoggedIn && isLogginIn) return AppRoutes.homePath;
-
+      //current location flags
+      final isOnboardingRoute = state.matchedLocation == AppRoutes.splashPath;
+      final isLogginRoute = state.matchedLocation == AppRoutes.loginPath;
+      //rule A: If user hasn't finished onboarding, force them to Onboarding
+      if (!hasCompletedOnboarding) {
+        return isOnboardingRoute ? null : AppRoutes.splashPath;
+      }
+      // Rule B: If onboarding IS completed and user is still on Onboarding
+      if (isOnboardingRoute) {
+        return isLoggedIn ? AppRoutes.homePath : AppRoutes.loginPath;
+      }
+      // Rule C: If user is NOT logged in and trying to go anywhere except Login
+      if (!isLoggedIn && !isLogginRoute) {
+        return AppRoutes.loginPath;
+      }
+      // Rule D: If user IS logged in and trying to access Login screen
+      if (isLoggedIn && isLogginRoute) {
+        return AppRoutes.homePath;
+      }
+      //allow navigation to proceed
       return null;
     },
     routes: [
@@ -73,7 +91,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 name: AppRoutes.addRecipe,
                 builder: (context, state) {
                   final recipe = state.extra as Recipe?;
-                  return AddRecipeScreen(recipe: recipe,);
+                  return AddRecipeScreen(recipe: recipe);
                 },
               ),
             ],

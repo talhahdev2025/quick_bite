@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_durations.dart';
@@ -6,15 +7,16 @@ import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/core/router/app_routes.dart';
+import 'package:quick_bite/features/splash/presentation/providers/provider.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<Offset> _topCircleAnimation;
@@ -66,10 +68,9 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _onGetStartedPressed() async {
-    final router = GoRouter.of(context);
     await _controller.reverse();
     if (!mounted) return;
-    router.go(AppRoutes.loginPath);
+    await ref.read(onboardingCompletedProvider.notifier).completeOnboarding();
   }
 
   @override
