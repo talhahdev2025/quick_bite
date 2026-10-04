@@ -25,7 +25,6 @@ class ProfileScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         elevation: 0,
-        scrolledUnderElevation: 0.5,
         centerTitle: false,
         automaticallyImplyLeading: false,
         title: const Text(

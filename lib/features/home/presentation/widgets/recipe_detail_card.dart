@@ -91,8 +91,8 @@ class RecipeDetailCard extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => _openFullImage(context, data.image),
                   child: Container(
-                    width: 200,
-                    height: 200,
+                    width: 250,
+                    height: 250,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.background,
@@ -131,7 +131,6 @@ class RecipeDetailCard extends StatelessWidget {
 
   void _openFullImage(BuildContext context, String? imageUrl) {
     if (imageUrl == null || imageUrl.isEmpty) return;
-
     showDialog<void>(
       context: context,
       barrierDismissible: true,

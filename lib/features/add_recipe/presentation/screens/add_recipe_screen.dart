@@ -101,7 +101,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   }
 
   void _showImageSourceDialog() {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => SafeArea(
         child: Wrap(
@@ -261,9 +261,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       );
       return;
     }
-    final user=ref.read(authProvider).user;
+    final user = ref.read(authProvider).user;
     final userId = user?.uid;
-    if (user==null||userId == null) {
+    if (user == null || userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('User session expired. Please log in again.'),
@@ -380,49 +380,76 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 700),
-            child: Form(
-              key: _formKey,
-              child: CustomScrollView(
-                slivers: [
-                  _buildAppBar(),
-                  SliverPadding(
-                    padding: AppInsets.hXl,
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        _buildCoverPhoto(),
-                        AppSpacing.vLg,
-                        _buildRecipeName(),
-                        AppSpacing.vLg,
-                        // _buildDescription(),
-                        AppSpacing.vLg,
-                        _buildDifficulty(),
-                        AppSpacing.vLg,
-                        _buildServings(),
-                        AppSpacing.vLg,
-                        _buildCookingTime(),
-                        AppSpacing.vLg,
-                        _buildCuisine(),
-                        AppSpacing.vLg,
-                        _buildMealType(),
-                        AppSpacing.vLg,
-                        _buildIngredients(),
-                        AppSpacing.vLg,
-                        _buildInstructions(),
-                        AppSpacing.vLg,
-                        _buildTags(),
-                        AppSpacing.vXl,
-                        _buildAddButton(),
-                        AppSpacing.vXl,
-                      ]),
-                    ),
-                  ),
-                ],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.surface,
+        elevation: 0,
+        title: Text(
+          widget.isEditMode ? 'Edit Recipe' : 'Create Recipe',
+          style: AppTextStyles.titleLarge.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        leading: widget.isEditMode
+            ? IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: AppColors.textPrimary,
+                ),
+              )
+            : null,
+        actions: [
+          TextButton(
+            onPressed: _resetForm,
+            child: Text(
+              'Reset',
+              style: AppTextStyles.labelLarge.copyWith(
+                color: AppColors.textSecondary,
               ),
             ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: CustomScrollView(
+            slivers: [
+              // _buildAppBar(),
+              SliverPadding(
+                padding: AppInsets.hXl,
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    _buildCoverPhoto(),
+                    AppSpacing.vLg,
+                    _buildRecipeName(),
+                    AppSpacing.vLg,
+                    // _buildDescription(),
+                    AppSpacing.vLg,
+                    _buildDifficulty(),
+                    AppSpacing.vLg,
+                    _buildServings(),
+                    AppSpacing.vLg,
+                    _buildCookingTime(),
+                    AppSpacing.vLg,
+                    _buildCuisine(),
+                    AppSpacing.vLg,
+                    _buildMealType(),
+                    AppSpacing.vLg,
+                    _buildIngredients(),
+                    AppSpacing.vLg,
+                    _buildInstructions(),
+                    AppSpacing.vLg,
+                    _buildTags(),
+                    AppSpacing.vXl,
+                    _buildAddButton(),
+                    AppSpacing.vXl,
+                  ]),
+                ),
+              ),
+            ],
           ),
         ),
       ),
