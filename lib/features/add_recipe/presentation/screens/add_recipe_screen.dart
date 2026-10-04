@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
+import 'package:quick_bite/core/constants/app_sizes.dart';
 import 'package:quick_bite/core/constants/app_spacing.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
 import 'package:quick_bite/features/add_recipe/presentation/widgets/dashed_border.dart';
@@ -35,6 +36,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   final _servingsController = TextEditingController();
   final _prepTimeController = TextEditingController();
   final _cookTimeController = TextEditingController();
+  final OverlayPortalController _tooltipController = OverlayPortalController();
 
   // Recipe data
   String? _selectedDifficulty = 'Easy';
@@ -347,7 +349,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         _resetForm();
         messenger.showSnackBar(
           const SnackBar(
-            backgroundColor: AppColors.secondary,
+            backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: AppRadius.large),
             content: Text(
@@ -399,16 +401,103 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                 ),
               )
             : null,
+        // actions: [
+        //   TextButton(
+        //     onPressed: widget.isEditMode?:_resetForm,
+        //     child: Text(
+        //       'Reset',
+        //       style: AppTextStyles.labelLarge.copyWith(
+        //         color: AppColors.textSecondary,
+        //       ),
+        //     ),
+        //   ),
+        // ],
         actions: [
-          TextButton(
-            onPressed: _resetForm,
-            child: Text(
-              'Reset',
-              style: AppTextStyles.labelLarge.copyWith(
-                color: AppColors.textSecondary,
+          if (widget.isEditMode)
+            OverlayPortal(
+              controller: _tooltipController,
+              overlayChildBuilder: (context) {
+                return Stack(
+                  children: [
+                    // Barrier to dismiss tooltip when tapping anywhere outside
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: _tooltipController.hide,
+                    ),
+                    // Custom Tooltip Container positioned top-right below App Bar
+                    Positioned(
+                      top: kToolbarHeight + MediaQuery.of(context).padding.top,
+                      right: AppSizes
+                          .md, // adjust horizontal padding to fit your layout
+                      child: Material(
+                        elevation: 4,
+                        borderRadius: AppRadius.medium,
+                        color: AppColors.surface,
+                        child: Container(
+                          width: 260,
+                          padding: AppInsets.md,
+                          decoration: BoxDecoration(
+                            borderRadius: AppRadius.medium,
+                            border: Border.all(
+                              color: AppColors.error.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.error_outline,
+                                    size: 18,
+                                    color: AppColors.error,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Rejection Reason',
+                                    style: AppTextStyles.labelLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.error,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                widget.recipe?.rejectionReason ??
+                                    'No reason provided.',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              child: IconButton(
+                icon: const Icon(
+                  Icons.info_outline,
+                  color: AppColors.textPrimary,
+                ),
+                tooltip: 'Rejection Reason',
+                onPressed: _tooltipController.toggle,
+              ),
+            )
+          else
+            TextButton(
+              onPressed: _resetForm,
+              child: Text(
+                'Reset',
+                style: AppTextStyles.labelLarge.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: SafeArea(
@@ -545,7 +634,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha:0.6),
+                          color: Colors.black.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Row(
