@@ -80,7 +80,7 @@ class ProfileScreen extends ConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
             sliver: SliverList.separated(
-              itemCount: 2,
+              itemCount: 1,
               separatorBuilder: (context, index) =>
                   const SizedBox(height: AppSizes.md),
               itemBuilder: (context, index) {

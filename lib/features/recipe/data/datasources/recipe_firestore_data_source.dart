@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quick_bite/features/home/presentation/provider/providers.dart';
-import 'package:quick_bite/features/login/presentation/providers/auth_notifier.dart';
 import 'package:quick_bite/features/recipe/data/models/recipe_model.dart';
 
 class RecipeFirestoreDataSource {

@@ -545,7 +545,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
+                          color: Colors.black.withValues(alpha:0.6),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Row(
@@ -619,21 +619,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       ],
     );
   }
-
-  // Widget _buildDescription() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const SectionHeader.name(header: 'Description'),
-  //       AppSpacing.vSm,
-  //       RecipeTextField(
-  //         controller: _descriptionController,
-  //         hintText: 'Tell a little about your recipe...',
-  //         maxLines: 3,
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildDifficulty() {
     return Column(

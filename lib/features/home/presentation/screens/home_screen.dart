@@ -32,31 +32,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _handleSignOut() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Sign Out'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true && mounted) {
-      await ref.read(authProvider.notifier).signOut();
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +43,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: CustomScrollView(
-          // physics: const AlwaysScrollableScrollPhysics(
-          //   parent: BouncingScrollPhysics(),
-          // ),
           slivers: [
             // Top Header & Search Section
             SliverToBoxAdapter(

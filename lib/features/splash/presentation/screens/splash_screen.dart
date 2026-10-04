@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:quick_bite/core/constants/app_colors.dart';
 import 'package:quick_bite/core/constants/app_durations.dart';
 import 'package:quick_bite/core/constants/app_insets.dart';
 import 'package:quick_bite/core/constants/app_radius.dart';
 import 'package:quick_bite/core/constants/app_text_styles.dart';
-import 'package:quick_bite/core/router/app_routes.dart';
 import 'package:quick_bite/features/splash/presentation/providers/provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
