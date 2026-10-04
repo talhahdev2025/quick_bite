@@ -32,7 +32,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
   // Controllers
   final _nameController = TextEditingController();
-  // final _descriptionController = TextEditingController();
   final _servingsController = TextEditingController();
   final _prepTimeController = TextEditingController();
   final _cookTimeController = TextEditingController();
@@ -170,7 +169,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    // _descriptionController.dispose();
     _servingsController.dispose();
     _prepTimeController.dispose();
     _cookTimeController.dispose();
@@ -226,10 +224,11 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
 
   void _resetForm() {
     _nameController.clear();
-    // _descriptionController.clear();
     _servingsController.clear();
     _prepTimeController.clear();
     _cookTimeController.clear();
+    _selectedImage = null;
+    _isImageRemoved = true;
 
     for (final c in _ingredientControllers) {
       c.dispose();
@@ -417,7 +416,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
           key: _formKey,
           child: CustomScrollView(
             slivers: [
-              // _buildAppBar(),
               SliverPadding(
                 padding: AppInsets.hXl,
                 sliver: SliverList(
@@ -426,7 +424,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                     AppSpacing.vLg,
                     _buildRecipeName(),
                     AppSpacing.vLg,
-                    // _buildDescription(),
                     AppSpacing.vLg,
                     _buildDifficulty(),
                     AppSpacing.vLg,
@@ -453,38 +450,6 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildAppBar() {
-    return SliverAppBar(
-      pinned: true,
-      automaticallyImplyLeading: false,
-      backgroundColor: AppColors.surface,
-      elevation: 0,
-      title: Text(
-        widget.isEditMode ? 'Edit Recipe' : 'Create Recipe',
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
-        ),
-      ),
-      leading: widget.isEditMode
-          ? IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.arrow_back),
-            )
-          : null,
-      actions: [
-        TextButton(
-          onPressed: _resetForm,
-          child: const Text(
-            'Reset',
-            style: TextStyle(color: AppColors.textSecondary),
-          ),
-        ),
-      ],
     );
   }
 
