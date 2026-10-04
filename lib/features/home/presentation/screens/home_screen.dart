@@ -107,24 +107,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          onPressed: authState.isLoading
-                              ? null
-                              : _handleSignOut,
-                          tooltip: 'Sign Out',
-                          icon: authState.isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Icon(
-                                  Icons.logout_rounded,
-                                  color: AppColors.textSecondary,
-                                ),
-                        ),
+                        // IconButton(
+                        //   onPressed: authState.isLoading
+                        //       ? null
+                        //       : _handleSignOut,
+                        //   tooltip: 'Sign Out',
+                        //   icon: authState.isLoading
+                        //       ? const SizedBox(
+                        //           height: 20,
+                        //           width: 20,
+                        //           child: CircularProgressIndicator(
+                        //             strokeWidth: 2,
+                        //           ),
+                        //         )
+                        //       : const Icon(
+                        //           Icons.logout_rounded,
+                        //           color: AppColors.textSecondary,
+                        //         ),
+                        // ),
                       ],
                     ),
                     AppSpacing.vLg,
